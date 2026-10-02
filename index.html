@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UNION SCHOOL - LIVE</title>
+<title>Union Secondary - v12</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
-<style>*{font-family:Inter,sans-serif}.gold-text{background:linear-gradient(90deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:700;letter-spacing:1.5px;filter:drop-shadow(0 0 8px rgba(191,149,63,0.5));}</style>
+<style>*{font-family:Inter,sans-serif}.gold-text{background:linear-gradient(90deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;filter:drop-shadow(0 0 8px rgba(191,149,63,0.5));}</style>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -15,83 +15,102 @@ const db = getFirestore(app);
 window.db=db; window.fDoc=doc; window.fSetDoc=setDoc; window.fGetDoc=getDoc; window.fOnSnapshot=onSnapshot;
 </script>
 </head>
-<body class="bg-[#eef2f7]">
-<div id="login" class="max-w-[400px] mx-auto min-h-screen flex flex-col p-6 bg-white relative">
+<body class="bg-slate-100">
+<div id="login" class="max-w-[420px] mx-auto min-h-screen flex flex-col p-6 bg-white">
 <div class="flex-1 flex flex-col justify-center">
-<h1 class="font-extrabold text-2xl text-center">UNION SCHOOL</h1>
-<p class="text-center text-[11px] opacity-50 mt-1 tracking-widest">LIVE FIREBASE v11</p>
+<h1 class="font-extrabold text-3xl text-center text-[#0b2a5a]">UNION SCHOOL</h1>
+<p class="text-center text-[11px] opacity-50 mt-1 tracking-[0.3em]">v12 - LIVE DATABASE</p>
 <div class="mt-10 space-y-4">
-<input id="loginPin" type="password" placeholder="Enter Access PIN" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-center text-xl tracking-[0.5em] bg-slate-50 outline-none focus:border-[#0b2a5a]">
-<button onclick="doLogin()" class="w-full bg-[#0b2a5a] text-white p-4 rounded-2xl font-bold shadow-lg">LOGIN</button>
-<p id="fbStatus" class="text-center text-[10px] mt-3 font-bold">● Connecting to Union Secondary...</p>
+<input id="loginPin" type="password" placeholder="••••" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-center text-2xl tracking-[0.5em] bg-slate-50 outline-none focus:border-[#0b2a5a]">
+<button onclick="doLogin()" class="w-full bg-[#0b2a5a] text-white p-4 rounded-2xl font-bold shadow-lg active:scale-95">LOGIN</button>
+<p id="fbStatus" class="text-center text-[10px] mt-3 font-bold text-amber-600">● Connecting to Union Secondary...</p>
+<div class="text-[10px] opacity-40 text-center mt-4">9999 = Developer | 1234 = Admin</div>
 </div>
 </div>
-<div class="mt-auto pt-8 text-center"><div class="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto mb-3"></div><p class="gold-text text-[14px]">Developed by E- Mutawakil Sadik</p></div>
+<div class="mt-auto pt-8 text-center"><div class="w-20 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto mb-3"></div><p class="gold-text text-[13px]">Developed by E- Mutawakil Sadik</p></div>
 </div>
-<div id="mainApp" class="hidden max-w-[600px] mx-auto bg-white min-h-screen shadow-xl pb-28 relative">
-<div class="bg-[#0b2a5a] text-white p-4 rounded-b-[30px]">
-<div class="flex justify-between items-center"><h1 id="userRole" class="font-bold text-sm">Admin</h1><div class="flex gap-2"><span class="text-[10px] bg-green-500 px-2 py-1 rounded-full">● LIVE</span><button onclick="logout()" class="bg-red-500 px-3 py-1 rounded-full text-[10px] font-bold">LOGOUT</button></div></div>
-<div id="classTabs" class="grid grid-cols-4 gap-2 mt-4 text-[11px] text-center"></div>
+
+<div id="mainApp" class="hidden max-w-[650px] mx-auto bg-white min-h-screen shadow-xl pb-28 relative">
+<div class="bg-[#0b2a5a] text-white p-5 rounded-b-[35px] sticky top-0 z-10">
+<div class="flex justify-between items-center"><h1 id="userRole" class="font-bold text-sm">Principal</h1><div class="flex gap-2 items-center"><span class="text-[10px] bg-green-500 px-3 py-1 rounded-full animate-pulse">● LIVE v12</span><button onclick="logout()" class="bg-red-500 px-3 py-1 rounded-full text-[10px] font-bold">LOGOUT</button></div></div>
+<div id="classTabs" class="grid grid-cols-4 gap-2 mt-5 text-[12px] font-bold text-center"></div>
 </div>
-<div class="px-2 flex gap-1.5 overflow-auto text-[10px] font-bold py-3">
-<button onclick="tab('students')" class="tab bg-black text-white px-3 py-2 rounded-full">Students</button>
-<button onclick="tab('grades')" class="tab bg-gray-100 px-3 py-2 rounded-full">My Grades</button>
-<button onclick="tab('subjects')" id="tb-subjects" class="tab bg-gray-100 px-3 py-2 rounded-full hidden">Subjects</button>
-<button onclick="tab('timetable')" id="tb-timetable" class="tab bg-gray-100 px-3 py-2 rounded-full hidden">Periods & Time</button>
-<button onclick="tab('exams')" id="tb-exams" class="tab bg-gray-100 px-3 py-2 rounded-full hidden">Exams</button>
-<button onclick="tab('attendance')" class="tab bg-gray-100 px-3 py-2 rounded-full">Attendance</button>
-<button onclick="tab('results')" class="tab bg-gray-100 px-3 py-2 rounded-full">Result</button>
-<button onclick="tab('teachers')" id="tb-teachers" class="tab bg-gray-100 px-3 py-2 rounded-full hidden">Teachers</button>
+
+<div class="px-2 flex gap-1.5 overflow-auto text-[10px] font-bold py-3 sticky top-[98px] bg-white z-10 border-b">
+<button onclick="tab('students')" id="t-students" class="tab bg-black text-white px-4 py-2.5 rounded-full whitespace-nowrap">Students</button>
+<button onclick="tab('grades')" id="t-grades" class="tab bg-gray-100 px-4 py-2.5 rounded-full whitespace-nowrap">My Grades</button>
+<button onclick="tab('subjects')" id="tb-subjects" class="tab bg-gray-100 px-4 py-2.5 rounded-full hidden">Subjects</button>
+<button onclick="tab('timetable')" id="tb-timetable" class="tab bg-gray-100 px-4 py-2.5 rounded-full hidden">Periods</button>
+<button onclick="tab('exams')" id="tb-exams" class="tab bg-gray-100 px-4 py-2.5 rounded-full hidden">Exams</button>
+<button onclick="tab('attendance')" id="t-attendance" class="tab bg-gray-100 px-4 py-2.5 rounded-full whitespace-nowrap">Attendance</button>
+<button onclick="tab('results')" id="t-results" class="tab bg-gray-100 px-4 py-2.5 rounded-full whitespace-nowrap">Result</button>
+<button onclick="tab('teachers')" id="tb-teachers" class="tab bg-gray-100 px-4 py-2.5 rounded-full hidden">Teachers</button>
 </div>
-<div id="view-students" class="p-4"><div class="flex gap-2"><input id="newName" placeholder="Student Full Name" class="flex-1 border p-3 rounded-xl text-sm"><button onclick="addStudent()" class="bg-black text-white px-5 rounded-xl">+</button></div><div id="studentsList" class="mt-4 space-y-2"></div></div>
-<div id="view-grades" class="hidden p-4"><div class="p-3 bg-blue-50 rounded-xl text-xs"><b id="mySubject">My Subject</b></div><div id="gradesList" class="mt-4 space-y-2"></div></div>
-<div id="view-subjects" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">📚 Edit Subjects per Class</h3><div class="flex gap-2"><input id="newSub" placeholder="New Subject" class="flex-1 border p-2.5 rounded-xl text-sm"><button onclick="addSubject()" class="bg-[#0b2a5a] text-white px-4 rounded-xl text-xs">+ Subject</button></div><div id="subjectsList" class="space-y-2 mt-3"></div></div>
-<div id="view-timetable" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">⏰ Periods Count & Time per Subject</h3><div id="periodsList" class="space-y-2"></div></div>
-<div id="view-exams" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">📅 Exams Date & Time</h3><div id="examTable" class="space-y-2"></div><div class="border p-3 rounded-xl space-y-2 bg-slate-50"><select id="examSub" class="w-full border p-2 rounded-lg text-xs"></select><div class="grid grid-cols-2 gap-2"><input id="examDate" type="date" class="border p-2 rounded-lg text-xs"><input id="examTime" type="time" class="border p-2 rounded-lg text-xs"></div><div class="grid grid-cols-2 gap-2"><input id="examRoom" placeholder="Room" class="border p-2 rounded-lg text-xs"><input id="examDur" placeholder="Duration min" type="number" class="border p-2 rounded-lg text-xs"></div><button onclick="addExam()" class="w-full bg-black text-white p-2.5 rounded-xl text-xs">+ Add Exam</button></div></div>
-<div id="view-attendance" class="hidden p-4"><div id="attList" class="space-y-2"></div><button onclick="allPresent()" class="w-full mt-3 bg-green-600 text-white p-3 rounded-xl text-xs font-bold">All Present Today</button></div>
+
+<div id="view-students" class="p-4"><div class="flex gap-2"><input id="newName" placeholder="Student Full Name" class="flex-1 border-2 border-slate-100 p-3.5 rounded-2xl text-sm outline-none focus:border-black"><button onclick="addStudent()" class="bg-black text-white w-14 rounded-2xl font-bold text-xl">+</button></div><div id="studentsList" class="mt-4 space-y-2"></div></div>
+<div id="view-grades" class="hidden p-4"><div class="p-3 bg-blue-50 rounded-2xl text-xs font-bold"><b id="mySubject">My Subject</b></div><div id="gradesList" class="mt-4 space-y-3"></div></div>
+<div id="view-subjects" class="hidden p-4 space-y-3"><h3 class="font-bold">📚 Subjects per Class</h3><div class="flex gap-2"><input id="newSub" placeholder="New Subject" class="flex-1 border p-3 rounded-xl text-sm"><button onclick="addSubject()" class="bg-[#0b2a5a] text-white px-5 rounded-xl text-xs font-bold">+ ADD</button></div><div id="subjectsList" class="space-y-2 mt-3"></div></div>
+<div id="view-timetable" class="hidden p-4 space-y-3"><h3 class="font-bold">⏰ Periods & Time</h3><div id="periodsList" class="space-y-2"></div></div>
+<div id="view-exams" class="hidden p-4 space-y-3"><h3 class="font-bold">📅 Exams Schedule</h3><div id="examTable" class="space-y-2"></div><div class="border-2 border-dashed p-3 rounded-2xl space-y-2 bg-slate-50"><select id="examSub" class="w-full border p-2.5 rounded-xl text-xs font-bold"></select><div class="grid grid-cols-2 gap-2"><input id="examDate" type="date" class="border p-2.5 rounded-xl text-xs"><input id="examTime" type="time" class="border p-2.5 rounded-xl text-xs"></div><div class="grid grid-cols-2 gap-2"><input id="examRoom" placeholder="Room No" class="border p-2.5 rounded-xl text-xs"><input id="examDur" placeholder="Duration (min)" type="number" class="border p-2.5 rounded-xl text-xs"></div><button onclick="addExam()" class="w-full bg-black text-white p-3 rounded-xl text-xs font-bold">+ ADD EXAM</button></div></div>
+<div id="view-attendance" class="hidden p-4"><div id="attList" class="space-y-2"></div><button onclick="allPresent()" class="w-full mt-4 bg-green-600 text-white p-3.5 rounded-2xl text-xs font-bold">✅ All Present Today</button></div>
 <div id="view-results" class="hidden p-4"><div id="rankingList" class="space-y-2"></div></div>
-<div id="view-teachers" class="hidden p-4 space-y-3"><input id="tName" placeholder="Teacher Name" class="w-full border p-2.5 rounded-xl text-sm"><select id="tSub" class="w-full border p-2.5 rounded-xl text-sm mt-2"></select><input id="tPin" placeholder="4-digit PIN" class="w-full border p-2.5 rounded-xl text-sm mt-2"><button onclick="addTeacher()" class="w-full bg-[#0b2a5a] text-white p-3 rounded-xl font-bold">Add Teacher</button><div id="teachersList" class="mt-4 space-y-2"></div></div>
-<div class="absolute bottom-0 left-0 right-0 p-4 text-center border-t bg-white/90"><p class="gold-text text-[11px]">Developed by E- Mutawakil Sadik</p></div>
+<div id="view-teachers" class="hidden p-4 space-y-3"><div class="bg-amber-50 p-3 rounded-xl text-[11px]">Add teacher with unique PIN</div><input id="tName" placeholder="Teacher Name" class="w-full border p-3 rounded-xl text-sm"><select id="tSub" class="w-full border p-3 rounded-xl text-sm"></select><input id="tPin" placeholder="4-digit PIN e.g 1111" class="w-full border p-3 rounded-xl text-sm"><button onclick="addTeacher()" class="w-full bg-[#0b2a5a] text-white p-3.5 rounded-xl font-bold">Add Teacher</button><div id="teachersList" class="mt-4 space-y-2"></div></div>
+
+<div class="absolute bottom-0 left-0 right-0 p-4 text-center border-t bg-white/90"><p class="gold-text text-[11px]">Developed by E- Mutawakil Sadik - v12</p></div>
 </div>
+
 <script type="module">
-let data = {students:[], grades:{}, teachers:[], attendance:{}, periods:{}, exams:{}, periodTimes:{}, subjects:{'1':["Arabic","English","Math","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'2':["Arabic","English","Math","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'3':["Arabic","English","Math","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'4-science':["Arabic","English","Advanced Math","Physics","Chemistry","Biology","Islamic","Computer"],'4-literary':["Arabic","English","Basic Math","History","Geography","Islamic","Computer","French"]}};
-let currentUser=null, currentClass='1';
+let data = {students:[], grades:{}, teachers:[], attendance:{}, periods:{}, exams:{}, periodTimes:{}, subjects:{'1':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'2':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'3':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'4-science':["Arabic","English","Advanced Math","Physics","Chemistry","Biology","Islamic","Computer"],'4-literary':["Arabic","English","Basic Math","History","Geography","Islamic","Computer","French"]}};
+let currentUser=null, currentClass='1', currentGrade4='science';
 async function initFirebase(){
 try{
 const snap = await window.fGetDoc(window.fDoc(window.db,"union","main"));
-if(snap.exists()){ data = snap.data(); document.getElementById('fbStatus').textContent="● Synced - Union Secondary LIVE"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
-else{ await window.fSetDoc(window.fDoc(window.db,"union","main"), data); document.getElementById('fbStatus').textContent="● Database Created"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
+if(snap.exists()){ data = snap.data(); document.getElementById('fbStatus').textContent="● Synced - Union Secondary LIVE v12 ✅"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
+else{ await window.fSetDoc(window.fDoc(window.db,"union","main"), data); document.getElementById('fbStatus').textContent="● Database Created v12 ✅"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
 window.fOnSnapshot(window.fDoc(window.db,"union","main"), (d)=>{ if(d.exists()){ data=d.data(); if(currentUser) render(); } });
-}catch(e){ document.getElementById('fbStatus').textContent="● Error: Go to Firestore Rules -> allow read,write"; console.error(e); }
+}catch(e){ document.getElementById('fbStatus').textContent="● Error: Check Firestore Rules -> allow true"; console.error(e); }
 }
 initFirebase();
 function save(){ window.fSetDoc(window.fDoc(window.db,"union","main"), data); }
-window.doLogin=function(){let pin=document.getElementById('loginPin').value.trim(); if(pin==='9999'){currentUser={name:'Developer 👑',role:'developer',subject:'All'}; startApp(); return;} if(pin==='1234'){currentUser={name:'Principal Admin',role:'admin',subject:'All'}; startApp(); return;} let t=data.teachers.find(x=>x.pin===pin); if(!t) return alert('Wrong PIN'); currentUser=t; startApp();}
-window.startApp=function(){document.getElementById('login').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden'); document.getElementById('userRole').textContent=currentUser.name; document.getElementById('classTabs').innerHTML=['1','2','3','4'].map(c=>`<button onclick="setClass('${c}')" id="c${c}" class="cbtn bg-white/20 p-2 rounded-xl">${c==='1'?'Grade 1':c==='2'?'Grade 2':c==='3'?'Grade 3':'Grade 4'}</button>`).join(''); let isAdmin=currentUser.role==='admin'||currentUser.role==='developer'; ['tb-subjects','tb-timetable','tb-exams','tb-teachers'].forEach(id=>{document.getElementById(id).classList.toggle('hidden',!isAdmin)}); if(!isAdmin){document.getElementById('mySubject').textContent='My Subject: '+currentUser.subject; tab('grades');}else tab('students'); setClass('1');}
+window.doLogin=function(){let pin=document.getElementById('loginPin').value.trim(); if(pin==='9999'){currentUser={name:'Developer 👑 v12',role:'developer',subject:'All'}; startApp(); return;} if(pin==='1234'){currentUser={name:'Principal Admin',role:'admin',subject:'All'}; startApp(); return;} let t=data.teachers.find(x=>x.pin===pin); if(!t) return alert('Wrong PIN ❌'); currentUser=t; startApp();}
+window.startApp=function(){document.getElementById('login').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden'); document.getElementById('userRole').textContent=currentUser.name; document.getElementById('classTabs').innerHTML=['1','2','3','4'].map(c=>`<button onclick="setClass('${c}')" id="c${c}" class="cbtn bg-white/20 p-3 rounded-2xl">${c==='4'?'Grade 4':'Grade '+c}</button>`).join(''); let isAdmin=currentUser.role==='admin'||currentUser.role==='developer'; ['tb-subjects','tb-timetable','tb-exams','tb-teachers'].forEach(id=>{document.getElementById(id).classList.toggle('hidden',!isAdmin)}); if(!isAdmin){document.getElementById('mySubject').textContent='My Subject: '+currentUser.subject; tab('grades');}else tab('students'); setClass('1');}
 window.logout=function(){currentUser=null; document.getElementById('mainApp').classList.add('hidden'); document.getElementById('login').classList.remove('hidden');}
-window.getKey=function(){return currentClass==='4'? '4-science' : currentClass;}
-window.setClass=function(c){currentClass=c; document.querySelectorAll('.cbtn').forEach(b=>b.className='cbtn bg-white/20 p-2 rounded-xl'); let el=document.getElementById('c'+c); if(el) el.className='cbtn bg-white text-[#0b2a5a] p-2 rounded-xl font-bold'; render();}
-window.tab=function(t){['students','grades','subjects','timetable','exams','attendance','results','teachers'].forEach(v=>{let el=document.getElementById('view-'+v); if(el) el.classList.add('hidden')}); document.getElementById('view-'+t).classList.remove('hidden'); render();}
-window.addStudent=function(){let n=document.getElementById('newName').value.trim(); if(n.length<3) return; data.students.push({id:Date.now(),name:n,class:getKey()}); document.getElementById('newName').value=''; save(); render();}
-window.addTeacher=function(){let name=document.getElementById('tName').value.trim(); let sub=document.getElementById('tSub').value; let pin=document.getElementById('tPin').value.trim(); if(!name||!pin) return; if(data.teachers.find(x=>x.pin===pin)) return alert('PIN used'); data.teachers.push({name,subject:sub,pin,role:'teacher'}); document.getElementById('tName').value=''; document.getElementById('tPin').value=''; save(); render();}
+window.getKey=function(){if(currentClass!=='4') return currentClass; return '4-'+currentGrade4;}
+window.setClass=function(c){
+if(c==='4'){
+let choice = currentGrade4==='science'?'literary':'science';
+if(document.getElementById('c4') && document.getElementById('c4').textContent.includes('Grade 4')){
+let sel = prompt('Grade 4 Section:\n1 = Science\n2 = Literary\nType 1 or 2','1');
+if(sel==='2') currentGrade4='literary'; else currentGrade4='science';
+}
+currentClass=c;
+}else currentClass=c;
+document.querySelectorAll('.cbtn').forEach(b=>b.className='cbtn bg-white/20 p-3 rounded-2xl');
+let el=document.getElementById('c'+c);
+if(el){ el.className='cbtn bg-white text-[#0b2a5a] p-3 rounded-2xl font-bold'; if(c==='4') el.textContent='Grade 4 - '+(currentGrade4==='science'?'Science':'Literary'); }
+render();
+}
+window.tab=function(t){['students','grades','subjects','timetable','exams','attendance','results','teachers'].forEach(v=>{let el=document.getElementById('view-'+v); if(el) el.classList.add('hidden')}); document.getElementById('view-'+t).classList.remove('hidden'); document.querySelectorAll('.tab').forEach(b=>{b.className='tab bg-gray-100 px-4 py-2.5 rounded-full whitespace-nowrap'}); let active=document.getElementById('t-'+t); if(active) active.className='tab bg-black text-white px-4 py-2.5 rounded-full whitespace-nowrap'; if(t==='subjects'||t==='timetable'||t==='exams'||t==='teachers'){ let adminTab=document.getElementById('tb-'+t); if(adminTab) adminTab.className='tab bg-black text-white px-4 py-2.5 rounded-full'; } render();}
+window.addStudent=function(){let n=document.getElementById('newName').value.trim(); if(n.length<3) return alert('Write full name'); data.students.push({id:Date.now(),name:n,class:getKey()}); document.getElementById('newName').value=''; save(); render();}
+window.addTeacher=function(){let name=document.getElementById('tName').value.trim(); let sub=document.getElementById('tSub').value; let pin=document.getElementById('tPin').value.trim(); if(!name||!pin) return alert('Fill all'); if(data.teachers.find(x=>x.pin===pin)) return alert('PIN used!'); data.teachers.push({name,subject:sub,pin,role:'teacher'}); document.getElementById('tName').value=''; document.getElementById('tPin').value=''; save(); render();}
 window.addSubject=function(){let k=getKey(); let name=document.getElementById('newSub').value.trim(); if(!name) return; if(!data.subjects[k]) data.subjects[k]=[]; data.subjects[k].push(name); document.getElementById('newSub').value=''; save(); render();}
 window.addExam=function(){let k=getKey(); let sub=document.getElementById('examSub').value; let date=document.getElementById('examDate').value; let time=document.getElementById('examTime').value; let room=document.getElementById('examRoom').value; let dur=document.getElementById('examDur').value; if(!sub||!date||!time) return alert('Fill date & time'); if(!data.exams[k]) data.exams[k]=[]; data.exams[k].push({sub,date,time,room,dur}); save(); render();}
 window.render=function(){
 let key=getKey(); let subs=data.subjects[key]||[]; let list=data.students.filter(s=>s.class===key);
 document.getElementById('tSub').innerHTML=subs.map(s=>`<option>${s}</option>`).join(''); document.getElementById('examSub').innerHTML=subs.map(s=>`<option>${s}</option>`).join('');
-document.getElementById('studentsList').innerHTML=list.map(s=>`<div class="border p-3 rounded-xl flex justify-between"><span class="font-bold text-sm">${s.name}</span><button onclick="data.students=data.students.filter(x=>x.id!==${s.id}); save(); render();" class="text-red-400 text-xs">Delete</button></div>`).join('')||'<p class="text-xs opacity-40">No students</p>';
-document.getElementById('subjectsList').innerHTML=subs.map((s,i)=>`<div class="flex justify-between bg-slate-50 p-2.5 rounded-xl text-xs"><span>${s}</span><button onclick="data.subjects['${key}'].splice(${i},1); save(); render();" class="text-red-500">Delete</button></div>`).join('');
+document.getElementById('studentsList').innerHTML=list.map(s=>`<div class="border-2 border-slate-50 p-3.5 rounded-2xl flex justify-between items-center bg-white"><span class="font-bold text-sm">${s.name}</span><button onclick="if(confirm('Delete?')){data.students=data.students.filter(x=>x.id!==${s.id}); save(); render();}" class="text-red-400 text-[11px] font-bold">DELETE</button></div>`).join('')||'<p class="text-xs opacity-30 text-center mt-8">No students in '+key+'</p>';
+document.getElementById('subjectsList').innerHTML=subs.map((s,i)=>`<div class="flex justify-between bg-slate-50 p-3 rounded-xl text-xs font-bold"><span>${s}</span><button onclick="data.subjects['${key}'].splice(${i},1); save(); render();" class="text-red-500">X</button></div>`).join('');
 let pk='p_'+key; if(!data.periods[pk]) data.periods[pk]={}; if(!data.periodTimes[pk]) data.periodTimes[pk]={};
-document.getElementById('periodsList').innerHTML=subs.map(sub=>{let c=data.periods[pk][sub]||4; let t=data.periodTimes[pk][sub]||'08:00'; return `<div class="grid grid-cols-3 gap-2 items-center bg-slate-50 p-2.5 rounded-xl text-xs"><span class="font-bold truncate">${sub}</span><input type="number" value="${c}" onchange="data.periods['${pk}']['${sub}']=parseInt(this.value)||4; save();" class="border rounded p-1.5 text-center"><input type="time" value="${t}" onchange="data.periodTimes['${pk}']['${sub}']=this.value; save();" class="border rounded p-1.5 text-center"></div>`;}).join('');
-document.getElementById('examTable').innerHTML=(data.exams[key]||[]).map((e,i)=>`<div class="border p-2.5 rounded-xl text-[11px] bg-yellow-50"><div class="flex justify-between"><b>${e.sub}</b><button onclick="data.exams['${key}'].splice(${i},1); save(); render();" class="text-red-500">Delete</button></div><div class="mt-1">📅 ${e.date} ⏰ ${e.time} - Room ${e.room||'-'} - ${e.dur||60}min</div></div>`).join('')||'<p class="text-[10px] opacity-40">No exams</p>';
+document.getElementById('periodsList').innerHTML=subs.map(sub=>{let c=data.periods[pk][sub]||4; let t=data.periodTimes[pk][sub]||'08:00'; return `<div class="grid grid-cols-3 gap-2 items-center bg-slate-50 p-3 rounded-xl text-xs"><span class="font-bold truncate">${sub}</span><input type="number" value="${c}" onchange="data.periods['${pk}']['${sub}']=parseInt(this.value)||4; save();" class="border rounded-lg p-2 text-center"><input type="time" value="${t}" onchange="data.periodTimes['${pk}']['${sub}']=this.value; save();" class="border rounded-lg p-2 text-center"></div>`;}).join('');
+document.getElementById('examTable').innerHTML=(data.exams[key]||[]).map((e,i)=>`<div class="border p-3 rounded-xl text-[11px] bg-yellow-50"><div class="flex justify-between font-bold"><b>${e.sub}</b><button onclick="data.exams['${key}'].splice(${i},1); save(); render();" class="text-red-500">Delete</button></div><div class="mt-1 opacity-70">📅 ${e.date} ⏰ ${e.time} - Room ${e.room||'-'} - ${e.dur||60}min</div></div>`).join('')||'<p class="text-[10px] opacity-30">No exams</p>';
 let mySub=currentUser?.role==='teacher'? currentUser.subject : null; let today=new Date().toISOString().split('T')[0];
-document.getElementById('gradesList').innerHTML=list.map(s=>{let g=data.grades[s.id]||{}; if(currentUser?.role!=='teacher'){let rows=subs.map(sub=>{let vv=g[sub]||{t1:0,t2:0,f:0}; return `<div class="flex justify-between text-[11px] bg-slate-50 p-2 rounded"><span>${sub}</span><span>${vv.t1+vv.t2+vv.f}</span></div>`}).join(''); return `<div class="border rounded-xl p-3"><p class="font-bold text-sm">${s.name}</p><div class="mt-2 space-y-1">${rows}</div></div>`;}else{let v=g[mySub]||{t1:0,t2:0,f:0}; return `<div class="border rounded-xl p-3 flex justify-between items-center"><p class="font-bold text-sm">${s.name}</p><div class="flex gap-1"><input id="t1_${s.id}" type="number" value="${v.t1}" class="w-12 border rounded p-1 text-center text-xs"><input id="t2_${s.id}" type="number" value="${v.t2}" class="w-12 border rounded p-1 text-center text-xs"><input id="f_${s.id}" type="number" value="${v.f}" class="w-12 border rounded p-1 text-center text-xs"><button onclick="saveGrade(${s.id})" class="bg-black text-white px-3 py-1 rounded text-[10px]">Save</button></div></div>`;}}).join('');
-document.getElementById('attList').innerHTML=list.map(s=>{let absent=data.attendance[s.id+'_'+today]===false; return `<div class="border p-3 rounded-xl flex justify-between"><span class="text-sm font-bold">${s.name}</span><button onclick="toggleAtt(${s.id})" class="px-3 py-1 rounded-full text-xs ${!absent?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${!absent?'Present':'Absent'}</button></div>`;}).join('');
+document.getElementById('gradesList').innerHTML=list.map(s=>{let g=data.grades[s.id]||{}; if(currentUser?.role!=='teacher'){let rows=subs.map(sub=>{let vv=g[sub]||{t1:0,t2:0,f:0}; let total=vv.t1+vv.t2+vv.f; return `<div class="flex justify-between text-[11px] bg-slate-50 p-2.5 rounded-xl"><span>${sub}</span><span class="font-bold">${total}/100</span></div>`}).join(''); return `<div class="border-2 border-slate-50 rounded-2xl p-3"><p class="font-bold text-sm">${s.name}</p><div class="mt-2 space-y-1">${rows}</div></div>`;}else{let v=g[mySub]||{t1:0,t2:0,f:0}; return `<div class="border-2 border-slate-50 rounded-2xl p-3 flex justify-between items-center"><p class="font-bold text-sm flex-1">${s.name}</p><div class="flex gap-1 items-center"><input id="t1_${s.id}" type="number" placeholder="T1" value="${v.t1}" class="w-11 border rounded-lg p-2 text-center text-xs"><input id="t2_${s.id}" type="number" placeholder="T2" value="${v.t2}" class="w-11 border rounded-lg p-2 text-center text-xs"><input id="f_${s.id}" type="number" placeholder="Final" value="${v.f}" class="w-11 border rounded-lg p-2 text-center text-xs"><button onclick="saveGrade(${s.id})" class="bg-black text-white px-3 py-2 rounded-lg text-[10px] font-bold">SAVE</button></div></div>`;}}).join('');
+document.getElementById('attList').innerHTML=list.map(s=>{let absent=data.attendance[s.id+'_'+today]===false; return `<div class="border-2 border-slate-50 p-3.5 rounded-2xl flex justify-between items-center"><span class="text-sm font-bold">${s.name}</span><button onclick="toggleAtt(${s.id})" class="px-4 py-1.5 rounded-full text-[11px] font-bold ${!absent?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${!absent?'Present ✅':'Absent ❌'}</button></div>`;}).join('');
 let ranked=list.map(s=>{let g=data.grades[s.id]||{}; let tot=0; subs.forEach(sub=>{let v=g[sub]; if(v) tot+=v.t1+v.t2+v.f;}); return {...s,total:tot, max:subs.length*100};}).sort((a,b)=>b.total-a.total);
-document.getElementById('rankingList').innerHTML=`<h3 class="font-bold text-sm">Result ${key} - ${subs.length} Subjects</h3>`+ranked.map((s,i)=>`<div class="border p-3 rounded-xl flex justify-between mt-2 ${i===0?'bg-yellow-50':''}"><div><p class="font-bold text-sm">${i+1}. ${s.name}</p><p class="text-[10px]">${s.total}/${s.max} - ${s.max?Math.round(s.total/s.max*100):0}%</p></div></div>`).join('');
-document.getElementById('teachersList').innerHTML=data.teachers.map(t=>`<div class="border p-2.5 rounded-xl flex justify-between text-xs"><div><p class="font-bold">${t.name}</p><p class="opacity-60">${t.subject} - PIN: ****</p></div><button onclick="data.teachers=data.teachers.filter(x=>x.pin!=='${t.pin}'); save(); render();" class="text-red-500">Delete</button></div>`).join('')||'No teachers';
+document.getElementById('rankingList').innerHTML=`<h3 class="font-bold text-sm">Result ${key.toUpperCase()} - ${subs.length} Subjects</h3>`+ranked.map((s,i)=>`<div class="border-2 ${i===0?'border-amber-200 bg-amber-50':'border-slate-50'} p-3.5 rounded-2xl flex justify-between mt-2"><div><p class="font-bold text-sm">${i+1}. ${s.name}</p><p class="text-[10px] opacity-60">${s.total}/${s.max} - ${s.max?Math.round(s.total/s.max*100):0}%</p></div><span class="text-lg">${i===0?'🥇':i===1?'🥈':i===2?'🥉':''}</span></div>`).join('');
+document.getElementById('teachersList').innerHTML=data.teachers.map(t=>`<div class="border-2 border-slate-50 p-3 rounded-xl flex justify-between text-xs"><div><p class="font-bold">${t.name}</p><p class="opacity-60">${t.subject} - PIN: ${t.pin}</p></div><button onclick="data.teachers=data.teachers.filter(x=>x.pin!=='${t.pin}'); save(); render();" class="text-red-500 font-bold">Delete</button></div>`).join('')||'<p class="text-[11px] opacity-30">No teachers</p>';
 }
-window.saveGrade=function(sid){let t1=parseInt(document.getElementById('t1_'+sid).value)||0; let t2=parseInt(document.getElementById('t2_'+sid).value)||0; let f=parseInt(document.getElementById('f_'+sid).value)||0; if(!data.grades[sid]) data.grades[sid]={}; data.grades[sid][currentUser.subject]={t1,t2,f}; save(); render();}
+window.saveGrade=function(sid){let t1=parseInt(document.getElementById('t1_'+sid).value)||0; let t2=parseInt(document.getElementById('t2_'+sid).value)||0; let f=parseInt(document.getElementById('f_'+sid).value)||0; if(!data.grades[sid]) data.grades[sid]={}; data.grades[sid][currentUser.subject]={t1,t2,f}; save(); render(); alert('Saved ✅');}
 window.toggleAtt=function(sid){let k=sid+'_'+new Date().toISOString().split('T')[0]; if(data.attendance[k]===false) delete data.attendance[k]; else data.attendance[k]=false; save(); render();}
 window.allPresent=function(){let today=new Date().toISOString().split('T')[0]; data.students.filter(s=>s.class===getKey()).forEach(s=>{delete data.attendance[s.id+'_'+today]}); save(); render();}
 </script>
