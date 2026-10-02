@@ -1,0 +1,9 @@
+{
+ "name": "Union Secondary School",
+ "short_name": "Union",
+ "start_url": ".",
+ "display": "standalone",
+ "background_color": "#0b2a5a",
+ "theme_color": "#0b2a5a",
+ "icons": [{"src":"https://cdn-icons-png.flaticon.com/512/3976/3976625.png","sizes":"512x512","type":"image/png"}]
+}
