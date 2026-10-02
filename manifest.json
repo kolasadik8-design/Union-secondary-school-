@@ -1,0 +1,15 @@
+{
+  "name": "UNION SCHOOL",
+  "short_name": "UNION",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b2a5a",
+  "theme_color": "#0b2a5a",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2997/2997995.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
