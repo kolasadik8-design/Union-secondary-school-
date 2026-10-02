@@ -2,49 +2,35 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UNION SCHOOL - Firebase</title>
+<title>UNION SCHOOL - LIVE</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
-<style>
-*{font-family:Inter,sans-serif}
-.gold-text{background:linear-gradient(90deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:700;letter-spacing:1.5px;filter:drop-shadow(0 0 8px rgba(191,149,63,0.4));}
-</style>
+<style>*{font-family:Inter,sans-serif}.gold-text{background:linear-gradient(90deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:700;letter-spacing:1.5px;filter:drop-shadow(0 0 8px rgba(191,149,63,0.5));}</style>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB65erIbKPojeJCtvWCaUPNBqA_YQ6QGJ0",
-  authDomain: "juba-stadium-1ace0.firebaseapp.com",
-  projectId: "juba-stadium-1ace0",
-  storageBucket: "juba-stadium-1ace0.firebasestorage.app",
-  messagingSenderId: "299347484908",
-  appId: "1:299347484908:web:fe86a4f0ef9324b3f0c5c9"
-};
-
+const firebaseConfig = { apiKey: "AIzaSyC1JXw0075RtuguFChN9-noXh1CpEe_qh8", authDomain: "union-secondary-school.firebaseapp.com", projectId: "union-secondary-school", storageBucket: "union-secondary-school.firebasestorage.app", messagingSenderId: "365279926139", appId: "1:365279926139:web:9ad23c142668a5412ccfde" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 window.db=db; window.fDoc=doc; window.fSetDoc=setDoc; window.fGetDoc=getDoc; window.fOnSnapshot=onSnapshot;
 </script>
 </head>
 <body class="bg-[#eef2f7]">
-
 <div id="login" class="max-w-[400px] mx-auto min-h-screen flex flex-col p-6 bg-white relative">
 <div class="flex-1 flex flex-col justify-center">
-<h1 class="font-extrabold text-2xl text-center tracking-tight">UNION SCHOOL</h1>
-<p class="text-center text-[11px] opacity-50 mt-1 tracking-widest">FIREBASE LIVE v11</p>
+<h1 class="font-extrabold text-2xl text-center">UNION SCHOOL</h1>
+<p class="text-center text-[11px] opacity-50 mt-1 tracking-widest">LIVE FIREBASE v11</p>
 <div class="mt-10 space-y-4">
-<input id="loginPin" type="password" placeholder="Enter Access PIN" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-center text-xl tracking-[0.5em] focus:border-[#0b2a5a] outline-none bg-slate-50">
+<input id="loginPin" type="password" placeholder="Enter Access PIN" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-center text-xl tracking-[0.5em] bg-slate-50 outline-none focus:border-[#0b2a5a]">
 <button onclick="doLogin()" class="w-full bg-[#0b2a5a] text-white p-4 rounded-2xl font-bold shadow-lg">LOGIN</button>
-<p id="fbStatus" class="text-center text-[10px] mt-3 opacity-60">● Connecting to Firebase...</p>
+<p id="fbStatus" class="text-center text-[10px] mt-3 font-bold">● Connecting to Union Secondary...</p>
 </div>
 </div>
 <div class="mt-auto pt-8 text-center"><div class="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto mb-3"></div><p class="gold-text text-[14px]">Developed by E- Mutawakil Sadik</p></div>
 </div>
-
 <div id="mainApp" class="hidden max-w-[600px] mx-auto bg-white min-h-screen shadow-xl pb-28 relative">
 <div class="bg-[#0b2a5a] text-white p-4 rounded-b-[30px]">
-<div class="flex justify-between items-center"><h1 id="userRole" class="font-bold text-sm">Admin</h1><div class="flex gap-2 items-center"><span id="liveDot" class="text-[10px] bg-green-500 px-2 py-1 rounded-full">● LIVE</span><button onclick="logout()" class="bg-red-500 px-3 py-1 rounded-full text-[10px] font-bold">LOGOUT</button></div></div>
+<div class="flex justify-between items-center"><h1 id="userRole" class="font-bold text-sm">Admin</h1><div class="flex gap-2"><span class="text-[10px] bg-green-500 px-2 py-1 rounded-full">● LIVE</span><button onclick="logout()" class="bg-red-500 px-3 py-1 rounded-full text-[10px] font-bold">LOGOUT</button></div></div>
 <div id="classTabs" class="grid grid-cols-4 gap-2 mt-4 text-[11px] text-center"></div>
 </div>
 <div class="px-2 flex gap-1.5 overflow-auto text-[10px] font-bold py-3">
@@ -57,41 +43,36 @@ window.db=db; window.fDoc=doc; window.fSetDoc=setDoc; window.fGetDoc=getDoc; win
 <button onclick="tab('results')" class="tab bg-gray-100 px-3 py-2 rounded-full">Result</button>
 <button onclick="tab('teachers')" id="tb-teachers" class="tab bg-gray-100 px-3 py-2 rounded-full hidden">Teachers</button>
 </div>
-
-<div id="view-students" class="p-4"><div class="flex gap-2"><input id="newName" placeholder="Student Full Name" maxlength="40" class="flex-1 border p-3 rounded-xl text-sm"><button onclick="addStudent()" class="bg-black text-white px-5 rounded-xl">+</button></div><div id="studentsList" class="mt-4 space-y-2"></div></div>
+<div id="view-students" class="p-4"><div class="flex gap-2"><input id="newName" placeholder="Student Full Name" class="flex-1 border p-3 rounded-xl text-sm"><button onclick="addStudent()" class="bg-black text-white px-5 rounded-xl">+</button></div><div id="studentsList" class="mt-4 space-y-2"></div></div>
 <div id="view-grades" class="hidden p-4"><div class="p-3 bg-blue-50 rounded-xl text-xs"><b id="mySubject">My Subject</b></div><div id="gradesList" class="mt-4 space-y-2"></div></div>
-<div id="view-subjects" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">📚 Edit Subjects per Class</h3><div class="flex gap-2"><input id="newSub" placeholder="New Subject Name" class="flex-1 border p-2.5 rounded-xl text-sm"><button onclick="addSubject()" class="bg-[#0b2a5a] text-white px-4 rounded-xl text-xs">+ Subject</button></div><div id="subjectsList" class="space-y-2 mt-3"></div></div>
-<div id="view-timetable" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">⏰ Periods Count & Time</h3><div class="grid grid-cols-3 gap-2 text-[10px] font-bold opacity-60"><div>Subject</div><div>Periods</div><div>Time</div></div><div id="periodsList" class="space-y-2"></div></div>
+<div id="view-subjects" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">📚 Edit Subjects per Class</h3><div class="flex gap-2"><input id="newSub" placeholder="New Subject" class="flex-1 border p-2.5 rounded-xl text-sm"><button onclick="addSubject()" class="bg-[#0b2a5a] text-white px-4 rounded-xl text-xs">+ Subject</button></div><div id="subjectsList" class="space-y-2 mt-3"></div></div>
+<div id="view-timetable" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">⏰ Periods Count & Time per Subject</h3><div id="periodsList" class="space-y-2"></div></div>
 <div id="view-exams" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">📅 Exams Date & Time</h3><div id="examTable" class="space-y-2"></div><div class="border p-3 rounded-xl space-y-2 bg-slate-50"><select id="examSub" class="w-full border p-2 rounded-lg text-xs"></select><div class="grid grid-cols-2 gap-2"><input id="examDate" type="date" class="border p-2 rounded-lg text-xs"><input id="examTime" type="time" class="border p-2 rounded-lg text-xs"></div><div class="grid grid-cols-2 gap-2"><input id="examRoom" placeholder="Room" class="border p-2 rounded-lg text-xs"><input id="examDur" placeholder="Duration min" type="number" class="border p-2 rounded-lg text-xs"></div><button onclick="addExam()" class="w-full bg-black text-white p-2.5 rounded-xl text-xs">+ Add Exam</button></div></div>
 <div id="view-attendance" class="hidden p-4"><div id="attList" class="space-y-2"></div><button onclick="allPresent()" class="w-full mt-3 bg-green-600 text-white p-3 rounded-xl text-xs font-bold">All Present Today</button></div>
 <div id="view-results" class="hidden p-4"><div id="rankingList" class="space-y-2"></div></div>
-<div id="view-teachers" class="hidden p-4 space-y-3"><h3 class="font-bold text-sm">Add Teachers (Admin+Dev)</h3><input id="tName" placeholder="Teacher Name" class="w-full border p-2.5 rounded-xl text-sm"><select id="tSub" class="w-full border p-2.5 rounded-xl text-sm mt-2"></select><input id="tPin" placeholder="4-digit PIN" class="w-full border p-2.5 rounded-xl text-sm mt-2"><button onclick="addTeacher()" class="w-full bg-[#0b2a5a] text-white p-3 rounded-xl font-bold">Add Teacher</button><div id="teachersList" class="mt-4 space-y-2"></div></div>
-
-<div class="absolute bottom-0 left-0 right-0 p-4 text-center border-t bg-white/90 backdrop-blur"><p class="gold-text text-[11px]">Developed by E- Mutawakil Sadik</p></div>
+<div id="view-teachers" class="hidden p-4 space-y-3"><input id="tName" placeholder="Teacher Name" class="w-full border p-2.5 rounded-xl text-sm"><select id="tSub" class="w-full border p-2.5 rounded-xl text-sm mt-2"></select><input id="tPin" placeholder="4-digit PIN" class="w-full border p-2.5 rounded-xl text-sm mt-2"><button onclick="addTeacher()" class="w-full bg-[#0b2a5a] text-white p-3 rounded-xl font-bold">Add Teacher</button><div id="teachersList" class="mt-4 space-y-2"></div></div>
+<div class="absolute bottom-0 left-0 right-0 p-4 text-center border-t bg-white/90"><p class="gold-text text-[11px]">Developed by E- Mutawakil Sadik</p></div>
 </div>
-
 <script type="module">
-let data = {students:[], grades:{}, teachers:[], attendance:{}, periods:{}, exams:{}, periodTimes:{}, subjects:{'1':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'2':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'3':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'4-science':["Arabic","English","Advanced Math","Physics","Chemistry","Biology","Islamic","Computer"],'4-literary':["Arabic","English","Basic Math","History","Geography","Islamic","Computer","French"]}};
+let data = {students:[], grades:{}, teachers:[], attendance:{}, periods:{}, exams:{}, periodTimes:{}, subjects:{'1':["Arabic","English","Math","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'2':["Arabic","English","Math","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'3':["Arabic","English","Math","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'4-science':["Arabic","English","Advanced Math","Physics","Chemistry","Biology","Islamic","Computer"],'4-literary':["Arabic","English","Basic Math","History","Geography","Islamic","Computer","French"]}};
 let currentUser=null, currentClass='1';
-
 async function initFirebase(){
 try{
 const snap = await window.fGetDoc(window.fDoc(window.db,"union","main"));
-if(snap.exists()){ data = snap.data(); document.getElementById('fbStatus').textContent="● Synced - Live Database"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
-else{ await window.fSetDoc(window.fDoc(window.db,"union","main"), data); document.getElementById('fbStatus').textContent="● Database Created - Ready"; }
+if(snap.exists()){ data = snap.data(); document.getElementById('fbStatus').textContent="● Synced - Union Secondary LIVE"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
+else{ await window.fSetDoc(window.fDoc(window.db,"union","main"), data); document.getElementById('fbStatus').textContent="● Database Created"; document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}
 window.fOnSnapshot(window.fDoc(window.db,"union","main"), (d)=>{ if(d.exists()){ data=d.data(); if(currentUser) render(); } });
-}catch(e){ document.getElementById('fbStatus').textContent="● Offline Mode - "+e.message; console.error(e); }
+}catch(e){ document.getElementById('fbStatus').textContent="● Error: Go to Firestore Rules -> allow read,write"; console.error(e); }
 }
 initFirebase();
-
-function save(){ window.fSetDoc(window.fDoc(window.db,"union","main"), data).catch(e=>console.log(e)); }
+function save(){ window.fSetDoc(window.fDoc(window.db,"union","main"), data); }
 window.doLogin=function(){let pin=document.getElementById('loginPin').value.trim(); if(pin==='9999'){currentUser={name:'Developer 👑',role:'developer',subject:'All'}; startApp(); return;} if(pin==='1234'){currentUser={name:'Principal Admin',role:'admin',subject:'All'}; startApp(); return;} let t=data.teachers.find(x=>x.pin===pin); if(!t) return alert('Wrong PIN'); currentUser=t; startApp();}
 window.startApp=function(){document.getElementById('login').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden'); document.getElementById('userRole').textContent=currentUser.name; document.getElementById('classTabs').innerHTML=['1','2','3','4'].map(c=>`<button onclick="setClass('${c}')" id="c${c}" class="cbtn bg-white/20 p-2 rounded-xl">${c==='1'?'Grade 1':c==='2'?'Grade 2':c==='3'?'Grade 3':'Grade 4'}</button>`).join(''); let isAdmin=currentUser.role==='admin'||currentUser.role==='developer'; ['tb-subjects','tb-timetable','tb-exams','tb-teachers'].forEach(id=>{document.getElementById(id).classList.toggle('hidden',!isAdmin)}); if(!isAdmin){document.getElementById('mySubject').textContent='My Subject: '+currentUser.subject; tab('grades');}else tab('students'); setClass('1');}
 window.logout=function(){currentUser=null; document.getElementById('mainApp').classList.add('hidden'); document.getElementById('login').classList.remove('hidden');}
 window.getKey=function(){return currentClass==='4'? '4-science' : currentClass;}
 window.setClass=function(c){currentClass=c; document.querySelectorAll('.cbtn').forEach(b=>b.className='cbtn bg-white/20 p-2 rounded-xl'); let el=document.getElementById('c'+c); if(el) el.className='cbtn bg-white text-[#0b2a5a] p-2 rounded-xl font-bold'; render();}
 window.tab=function(t){['students','grades','subjects','timetable','exams','attendance','results','teachers'].forEach(v=>{let el=document.getElementById('view-'+v); if(el) el.classList.add('hidden')}); document.getElementById('view-'+t).classList.remove('hidden'); render();}
-window.addStudent=function(){let n=document.getElementById('newName').value.trim().slice(0,40); if(n.length<3) return; data.students.push({id:Date.now(),name:n,class:getKey()}); document.getElementById('newName').value=''; save(); render();}
+window.addStudent=function(){let n=document.getElementById('newName').value.trim(); if(n.length<3) return; data.students.push({id:Date.now(),name:n,class:getKey()}); document.getElementById('newName').value=''; save(); render();}
 window.addTeacher=function(){let name=document.getElementById('tName').value.trim(); let sub=document.getElementById('tSub').value; let pin=document.getElementById('tPin').value.trim(); if(!name||!pin) return; if(data.teachers.find(x=>x.pin===pin)) return alert('PIN used'); data.teachers.push({name,subject:sub,pin,role:'teacher'}); document.getElementById('tName').value=''; document.getElementById('tPin').value=''; save(); render();}
 window.addSubject=function(){let k=getKey(); let name=document.getElementById('newSub').value.trim(); if(!name) return; if(!data.subjects[k]) data.subjects[k]=[]; data.subjects[k].push(name); document.getElementById('newSub').value=''; save(); render();}
 window.addExam=function(){let k=getKey(); let sub=document.getElementById('examSub').value; let date=document.getElementById('examDate').value; let time=document.getElementById('examTime').value; let room=document.getElementById('examRoom').value; let dur=document.getElementById('examDur').value; if(!sub||!date||!time) return alert('Fill date & time'); if(!data.exams[k]) data.exams[k]=[]; data.exams[k].push({sub,date,time,room,dur}); save(); render();}
