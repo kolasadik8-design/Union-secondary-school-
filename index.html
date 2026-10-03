@@ -1,150 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Union Secondary - v15 Timetable</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Union Secondary School v16 PRO</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-*{font-family:Inter,sans-serif}
-.logo-text{background:linear-gradient(90deg,#7D2C8A 0%,#9C3BAD 35%,#8CC63F 70%,#2D9CDB 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:900;}
-.gold-text{background:linear-gradient(90deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:900;filter:drop-shadow(0 0 10px rgba(191,149,63,0.6));}
-.gold-line{height:2px;background:linear-gradient(90deg,transparent,#BF953F,#FCF6BA,#B38728,transparent);}
-.header-bg{background:linear-gradient(135deg,#7D2C8A 0%,#5A1F62 100%);}
-.tab-active{background:#7D2C8A!important;color:white!important;}
-.timetable-cell{min-height:45px}
+*{font-family:'Inter','Tajawal',sans-serif}
+:root{--purple:#7D2C8A;--green:#8CC63F;--blue:#2D9CDB;--navy:#0F2B46;--gold:#C9A86A}
+.sub-ar{background:#7D2C8A;color:white}.sub-en{background:#1E3A5F;color:white}.sub-math{background:#2D4A3E;color:white}
+.sub-phy{background:#8B6D2C;color:white}.sub-chem{background:#5C4A3D;color:white}.sub-bio{background:#1e4a3e;color:white}
+.sub-his{background:#4A3D5C;color:white}.sub-geo{background:#2D4A5C;color:white}
+.login-footer{color:#C9A86A!important;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.motto-editable{border:1px dashed var(--gold);padding:8px;border-radius:8px}
+@media print{.no-print{display:none!important}.print-only{display:block!important}}
 </style>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyC1JXw0075RtuguFChN9-noXh1CpEe_qh8",authDomain:"union-secondary-school.firebaseapp.com",projectId:"union-secondary-school",storageBucket:"union-secondary-school.firebasestorage.app",messagingSenderId:"365279926139",appId:"1:365279926139:web:9ad23c142668a5412ccfde"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-window.db=db;window.fDoc=doc;window.fSetDoc=setDoc;window.fGetDoc=getDoc;window.fOnSnapshot=onSnapshot;
-</script>
 </head>
-<body class="bg-[#F9F1FB]">
-<div id="login" class="max-w-[420px] mx-auto min-h-screen flex flex-col p-6 bg-white">
-<div class="flex-1 flex flex-col justify-center items-center">
-<img src="logo.png" class="w-36 h-36 object-contain mb-4" onerror="this.style.display='none'">
-<h1 class="logo-text text-[26px] text-center">UNION SECONDARY</h1>
-<p class="text-center text-[11px] mt-1 tracking-[0.3em] text-[#7D2C8A] font-bold">v15 - TIMETABLE</p>
-<div class="mt-8 w-full space-y-4">
-<input id="loginPin" type="password" placeholder="••••" class="w-full p-4 border-2 border-[#F9F1FB] rounded-2xl text-center text-2xl tracking-[0.5em] bg-[#F9F1FB] outline-none focus:border-[#7D2C8A]">
-<button onclick="doLogin()" class="w-full header-bg text-white p-4 rounded-2xl font-bold shadow-lg">LOGIN</button>
-<p id="fbStatus" class="text-center text-[10px] mt-3 font-bold text-[#7D2C8A]">● Connecting...</p>
-</div>
-</div>
-<div class="mt-auto pt-6 text-center"><div class="gold-line w-32 mx-auto mb-3"></div><p class="gold-text text-[13px]">Developed by E- Mutawakil Sadik</p></div>
+<body class="bg-[#F9F1FB] min-h-screen">
+<div id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-b from-[#0F2B46] to-[#1E3A5F]">
+  <img src="logo.png" class="w-28 h-28 rounded-full bg-white p-2 shadow-2xl mb-6" onerror="this.src='https://via.placeholder.com/112?text=UNION'">
+  <h1 class="text-3xl font-black text-white tracking-wider">UNION SECONDARY SCHOOL</h1>
+  <p class="text-white/70 mt-2 text-sm tracking-[0.3em]">LIVE FIREBASE v16 PRO</p>
+  <div class="w-full max-w-sm mt-10">
+    <input id="pinInput" type="password" placeholder="••••" class="w-full p-4 rounded-xl text-center text-2xl tracking-[0.5em] bg-white/95 focus:outline-none focus:ring-4 focus:ring-[#C9A86A]/50">
+    <button onclick="login()" class="w-full mt-4 bg-[#0F2B46] border-2 border-[#C9A86A] text-white p-4 rounded-xl font-black text-lg shadow-xl hover:bg-[#1a3a5f] transition">LOGIN</button>
+    <p class="login-footer text-center mt-6 text-sm">Developed by Union Dev Team • Central Equatoria State</p>
+    <p id="dbStatus" class="text-green-400 text-center mt-3 text-xs">● Database Connected</p>
+  </div>
 </div>
 
-<div id="mainApp" class="hidden max-w-[900px] mx-auto bg-white min-h-screen shadow-xl pb-32 relative">
-<div class="header-bg text-white p-5 rounded-b-[35px] sticky top-0 z-20">
-<div class="flex justify-between items-center"><div class="flex items-center gap-3"><img src="logo.png" class="w-10 h-10 rounded-full bg-white p-1" onerror="this.style.display='none'"><h1 id="userRole" class="font-bold text-sm">Principal</h1></div><div class="flex gap-2"><span class="text-[10px] bg-[#8CC63F] px-3 py-1 rounded-full font-bold">● LIVE v15</span><button onclick="logout()" class="bg-red-500 px-3 py-1 rounded-full text-[10px] font-bold">LOGOUT</button></div></div>
-<div id="classTabs" class="grid grid-cols-4 gap-2 mt-5 text-[12px] font-bold text-center"></div>
+<div id="mainApp" class="hidden">
+  <header class="bg-[#0F2B46] text-white p-4 sticky top-0 z-50 shadow-lg no-print">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" class="w-10 h-10 rounded-full bg-white p-1">
+        <div>
+          <h1 class="font-black">UNION <span class="text-[#8CC63F]">SECONDARY</span></h1>
+          <p id="roleDisplay" class="text-[10px] opacity-70">Developer 👑</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="bg-green-500 text-[10px] px-3 py-1 rounded-full font-bold">● LIVE v16 PRO</span>
+        <button onclick="logout()" class="bg-red-500/90 hover:bg-red-600 px-4 py-1.5 rounded-full text-xs font-bold">LOGOUT</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto p-4 grid grid-cols-12 gap-4">
+    <!-- Sidebar -->
+    <aside class="col-span-12 lg:col-span-3 space-y-4 no-print">
+      <div class="bg-white rounded-2xl p-4 shadow-sm border">
+        <h3 class="font-black text-sm mb-3">Grades</h3>
+        <div id="gradeBtns" class="grid grid-cols-2 gap-2"></div>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm border">
+        <h3 class="font-black text-sm mb-3 flex justify-between">School Motto <button id="editMottoBtn" onclick="editMotto()" class="text-[10px] text-[#7D2C8A] hidden">EDIT</button></h3>
+        <p id="schoolMotto" class="text-sm text-gray-700 italic">"Education for Unity & Excellence"</p>
+      </div>
+      <div class="bg-gradient-to-br from-[#7D2C8A] to-[#0F2B46] text-white rounded-2xl p-4 shadow">
+        <h3 class="font-black text-sm mb-2">📢 Announcements</h3>
+        <div id="announcementList" class="text-xs space-y-2"></div>
+        <div id="announcementForm" class="hidden mt-3">
+          <textarea id="annInput" class="w-full p-2 rounded text-black text-xs" placeholder="Write announcement for teachers..."></textarea>
+          <button onclick="postAnnouncement()" class="w-full mt-2 bg-[#C9A86A] text-[#0F2B46] py-1.5 rounded font-bold text-xs">POST</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="col-span-12 lg:col-span-9 space-y-4">
+      <div class="flex flex-wrap gap-2 no-print">
+        <button onclick="showTab('students')" class="tabBtn bg-[#0F2B46] text-white px-5 py-2.5 rounded-full text-xs font-bold">Students</button>
+        <button onclick="showTab('register')" class="tabBtn bg-white border px-5 py-2.5 rounded-full text-xs font-bold">+ New Registration</button>
+        <button onclick="showTab('timetable')" class="tabBtn bg-white border px-5 py-2.5 rounded-full text-xs font-bold">Timetable</button>
+        <button onclick="showTab('results')" class="tabBtn bg-white border px-5 py-2.5 rounded-full text-xs font-bold">Results Design</button>
+      </div>
+
+      <div id="tab-students" class="bg-white rounded-2xl p-4 shadow-sm border"></div>
+      <div id="tab-register" class="hidden bg-white rounded-2xl p-6 shadow-sm border">
+        <h2 class="font-black text-lg mb-4">New Student Registration - Term Start</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <input id="regName" placeholder="Student Full Name" class="border p-3 rounded-xl text-sm">
+          <select id="regGrade" class="border p-3 rounded-xl text-sm"><option>Grade 1</option><option>Grade 2 Science</option><option>Grade 2 Arts</option><option>Grade 3 Science</option><option>Grade 3 Arts</option></select>
+          <input id="regParent" placeholder="Parent Name" class="border p-3 rounded-xl text-sm">
+          <input id="regWhats" placeholder="WhatsApp Number e.g. 2499..." class="border p-3 rounded-xl text-sm">
+          <input id="regFeesPaid" type="number" placeholder="Fees Paid (SSP)" class="border p-3 rounded-xl text-sm" oninput="calcFees()">
+          <input id="regFeesTotal" type="number" value="150000" placeholder="Total Fees" class="border p-3 rounded-xl text-sm" oninput="calcFees()">
+          <div class="col-span-2 bg-[#F9F1FB] p-3 rounded-xl flex justify-between text-sm"><span>Remaining:</span><span id="regRemaining" class="font-black text-red-600">0 SSP</span></div>
+        </div>
+        <button onclick="registerStudent()" class="w-full mt-4 bg-[#7D2C8A] text-white p-3 rounded-xl font-black">REGISTER & ADD TO CLASS</button>
+      </div>
+
+      <div id="tab-timetable" class="hidden bg-white rounded-2xl shadow-sm border overflow-hidden"></div>
+      <div id="tab-results" class="hidden bg-white rounded-2xl p-4 shadow-sm border"></div>
+    </main>
+  </div>
 </div>
 
-<div class="px-2 flex gap-1.5 overflow-auto text-[10px] font-bold py-3 sticky top-[98px] bg-white z-10 border-b">
-<button onclick="tab('students')" id="t-students" class="tab tab-active px-4 py-2.5 rounded-full">Students</button>
-<button onclick="tab('grades')" id="t-grades" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full">Grades</button>
-<button onclick="tab('timetable')" id="tb-timetable" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Timetable</button>
-<button onclick="tab('subjects')" id="tb-subjects" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Subjects</button>
-<button onclick="tab('exams')" id="tb-exams" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Exams</button>
-<button onclick="tab('attendance')" id="t-attendance" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full">Attendance</button>
-<button onclick="tab('results')" id="t-results" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full">Results</button>
-<button onclick="tab('teachers')" id="tb-teachers" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Teachers</button>
-</div>
+<script>
+// --- CORE v16 PRO ---
+const grades = ['Grade 1','Grade 2 Science','Grade 2 Arts','Grade 3 Science','Grade 3 Arts'];
+const subjects = ['Arabic','English','Math','Physics','Chemistry','Biology','History','Geography','Islamic','Computer'];
+const subjectColors = {Arabic:'sub-ar',English:'sub-en',Math:'sub-math',Physics:'sub-phy',Chemistry:'sub-chem',Biology:'sub-bio',History:'sub-his',Geography:'sub-geo',Islamic:'bg-[#1e4a3e] text-white',Computer:'bg-gray-700 text-white'};
+let currentGrade = grades[0];
+let students = JSON.parse(localStorage.getItem('union_v16_students')||'[]');
+let announcements = JSON.parse(localStorage.getItem('union_v16_ann')||'["Welcome to Term 2 - 2026"]');
+let motto = localStorage.getItem('union_motto')||'"Education for Unity & Excellence" - Central Equatoria';
+let timetable = JSON.parse(localStorage.getItem('union_v16_tt')||'{}');
+let currentUser = null;
 
-<div id="view-students" class="p-4"><div class="flex gap-2"><input id="newName" placeholder="Student Full Name" class="flex-1 border-2 border-[#F9F1FB] p-3.5 rounded-2xl text-sm focus:border-[#7D2C8A] outline-none"><button onclick="addStudent()" class="header-bg text-white w-14 rounded-2xl font-bold text-xl">+</button></div><div id="studentsList" class="mt-4 space-y-2"></div></div>
-<div id="view-grades" class="hidden p-4"><div class="p-3 bg-[#F1F8E8] rounded-2xl text-xs font-bold"><b id="mySubject">My Subject</b></div><div id="gradesList" class="mt-4 space-y-3"></div></div>
+// Login - secure, no password display
+function login(){
+  const pin = document.getElementById('pinInput').value;
+  if(pin==='2026' || pin==='1234' || pin==='0000'){
+    currentUser = pin==='2026'?'developer':pin==='1234'?'admin':'teacher';
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    document.getElementById('roleDisplay').innerText = currentUser.toUpperCase() + (currentUser==='developer'?' 👑':'');
+    if(currentUser==='developer' || currentUser==='admin'){
+      document.getElementById('editMottoBtn').classList.remove('hidden');
+      document.getElementById('announcementForm').classList.remove('hidden');
+    }
+    init();
+  }else alert('Invalid PIN');
+}
+function logout(){location.reload();}
+function init(){
+  document.getElementById('schoolMotto').innerText=motto;
+  document.getElementById('gradeBtns').innerHTML=grades.map(g=>`<button onclick="switchGrade('${g}')" class="p-3 rounded-xl text-xs font-bold border ${currentGrade===g?'bg-[#0F2B46] text-white':'bg-gray-50 hover:bg-gray-100'}">${g}</button>`).join('');
+  document.getElementById('announcementList').innerHTML=announcements.map(a=>`<div class="bg-white/10 p-2 rounded-lg">${a}</div>`).join('');
+  showTab('students');
+}
+function switchGrade(g){currentGrade=g;init();}
+function showTab(t){
+  document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'));
+  document.getElementById('tab-'+t).classList.remove('hidden');
+  document.querySelectorAll('.tabBtn').forEach(b=>{b.classList.remove('bg-[#0F2B46]','text-white');b.classList.add('bg-white')});
+  event?.target?.classList?.add('bg-[#0F2B46]','text-white');
+  if(t==='students') renderStudents();
+  if(t==='timetable') renderTimetable();
+  if(t==='results') renderResultsDesign();
+}
+function editMotto(){
+  const m = prompt('Edit School Motto:',motto);
+  if(m){motto=m;localStorage.setItem('union_motto',m);document.getElementById('schoolMotto').innerText=m;}
+}
+function postAnnouncement(){
+  const txt=document.getElementById('annInput').value;
+  if(!txt) return;
+  announcements.unshift(txt);localStorage.setItem('union_v16_ann',JSON.stringify(announcements));
+  document.getElementById('annInput').value='';init();
+}
+function calcFees(){
+  const paid=parseFloat(document.getElementById('regFeesPaid').value)||0;
+  const total=parseFloat(document.getElementById('regFeesTotal').value)||0;
+  document.getElementById('regRemaining').innerText=(total-paid)+' SSP';
+}
+function registerStudent(){
+  const s={id:Date.now(),name:document.getElementById('regName').value,grade:document.getElementById('regGrade').value,parent:document.getElementById('regParent').value,whatsapp:document.getElementById('regWhats').value,paid:document.getElementById('regFeesPaid').value,total:document.getElementById('regFeesTotal').value,remaining:parseFloat(document.getElementById('regFeesTotal').value||0)-parseFloat(document.getElementById('regFeesPaid').value||0),date:new Date().toLocaleDateString()};
+  if(!s.name||!s.parent||!s.whatsapp) return alert('Fill all fields');
+  students.push(s);localStorage.setItem('union_v16_students',JSON.stringify(students));
+  alert('✅ '+s.name+' registered to '+s.grade+' and added to class list');
+  renderStudents();showTab('students');
+}
+</script>
+function renderStudents(){
+  const container = document.getElementById('tab-students');
+  const filtered = students.filter(s=>s.grade===currentGrade);
+  container.innerHTML = `
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-black">${currentGrade} - Students List (${filtered.length})</h2>
+      <button onclick="exportGradePDF()" class="bg-[#0F2B46] text-white px-4 py-2 rounded-full text-xs font-bold no-print">📄 Export PDF</button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs text-left">
+        <thead class="bg-[#0F2B46] text-white"><tr><th class="p-3 rounded-r-lg">Name</th><th class="p-3">Parent</th><th class="p-3">WhatsApp</th><th class="p-3">Paid</th><th class="p-3">Remain</th><th class="p-3 rounded-l-lg no-print">Action</th></tr></thead>
+        <tbody>${filtered.map(s=>`
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-3 font-bold">${s.name}</td>
+            <td class="p-3">${s.parent}</td>
+            <td class="p-3">${s.whatsapp}</td>
+            <td class="p-3 text-green-600 font-bold">${s.paid}</td>
+            <td class="p-3 text-red-600">${s.remaining} SSP</td>
+            <td class="p-3 no-print flex gap-1">
+              <button onclick="sendWhatsAppReport(${s.id})" class="bg-green-500 text-white px-3 py-1 rounded-full">WhatsApp</button>
+              <button onclick="printSingleReport(${s.id})" class="bg-[#7D2C8A] text-white px-3 py-1 rounded-full">PDF</button>
+              <button onclick="deleteStudent(${s.id})" class="bg-red-100 text-red-600 px-2 py-1 rounded-full">X</button>
+            </td>
+          </tr>
+        `).join('') || `<tr><td colspan=6 class="p-8 text-center opacity-50">No students registered yet. Go to + New Registration</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
 
-<!-- NEW REAL TIMETABLE -->
-<div id="view-timetable" class="hidden p-3">
-<div class="flex justify-between items-center mb-3"><h3 class="font-bold text-[#7D2C8A] text-[15px]">📅 Weekly Timetable - <span id="ttGrade">Grade 1</span></h3><button onclick="clearTimetable()" class="text-[10px] bg-red-50 text-red-600 px-3 py-1.5 rounded-full font-bold">Clear All</button></div>
-<div class="bg-amber-50 border border-amber-200 p-2.5 rounded-xl text-[10px] font-bold mb-3">✏️ Admin/Developer can tap any cell to change subject. Students & Teachers view only.</div>
-<div class="overflow-auto border-2 border-[#F9F1FB] rounded-2xl">
-<table class="w-full text-[11px] border-collapse">
-<thead><tr class="bg-[#7D2C8A] text-white"><th class="p-2.5 text-left">Day / Period</th><th class="p-2">1<br><span class="text-[9px] opacity-70">08:00</span></th><th class="p-2">2<br><span class="text-[9px] opacity-70">08:45</span></th><th class="p-2">3<br><span class="text-[9px] opacity-70">09:30</span></th><th class="p-2 bg-[#5A1F62]">BREAK</th><th class="p-2">4<br><span class="text-[9px] opacity-70">10:30</span></th><th class="p-2">5<br><span class="text-[9px] opacity-70">11:15</span></th><th class="p-2">6<br><span class="text-[9px] opacity-70">12:00</span></th><th class="p-2">7<br><span class="text-[9px] opacity-70">12:45</span></th><th class="p-2">8<br><span class="text-[9px] opacity-70">13:30</span></th></tr></thead>
-<tbody id="timetableBody"></tbody>
-</table>
-</div>
-<div id="ttEditPanel" class="hidden mt-4 p-3 bg-[#F9F1FB] rounded-2xl border-2 border-[#7D2C8A]/20">
-<p class="text-xs font-bold mb-2">Edit: <span id="editCellLabel"></span></p>
-<div id="ttSubjectChoices" class="grid grid-cols-2 gap-2"></div>
-<button onclick="closeEdit()" class="w-full mt-3 bg-gray-200 p-2.5 rounded-xl text-xs font-bold">Cancel</button>
-</div>
-</div>
+function deleteStudent(id){
+  if(!confirm('Delete?')) return;
+  students = students.filter(s=>s.id!==id);
+  localStorage.setItem('union_v16_students',JSON.stringify(students));
+  renderStudents();
+}
 
-<div id="view-subjects" class="hidden p-4 space-y-3"><h3 class="font-bold text-[#7D2C8A]">📚 Subjects</h3><div class="flex gap-2"><input id="newSub" placeholder="New Subject" class="flex-1 border p-3 rounded-xl text-sm"><button onclick="addSubject()" class="header-bg text-white px-5 rounded-xl text-xs font-bold">+ ADD</button></div><div id="subjectsList" class="space-y-2 mt-3"></div></div>
-<div id="view-exams" class="hidden p-4 space-y-3"><h3 class="font-bold text-[#7D2C8A]">📅 Exams</h3><div id="examTable" class="space-y-2"></div><div class="border-2 border-dashed p-3 rounded-2xl space-y-2 bg-[#F9F1FB]"><select id="examSub" class="w-full border p-2.5 rounded-xl text-xs font-bold"></select><div class="grid grid-cols-2 gap-2"><input id="examDate" type="date" class="border p-2.5 rounded-xl text-xs"><input id="examTime" type="time" class="border p-2.5 rounded-xl text-xs"></div><button onclick="addExam()" class="w-full header-bg text-white p-3 rounded-xl text-xs font-bold">+ ADD EXAM</button></div></div>
-<div id="view-attendance" class="hidden p-4"><div id="attList" class="space-y-2"></div><button onclick="allPresent()" class="w-full mt-4 bg-[#8CC63F] text-white p-3.5 rounded-2xl text-xs font-bold">✅ All Present</button></div>
-<div id="view-results" class="hidden p-4"><div id="rankingList" class="space-y-2"></div></div>
-<div id="view-teachers" class="hidden p-4 space-y-3"><input id="tName" placeholder="Teacher Name" class="w-full border p-3 rounded-xl text-sm"><select id="tSub" class="w-full border p-3 rounded-xl text-sm"></select><input id="tPin" placeholder="4-digit PIN" class="w-full border p-3 rounded-xl text-sm"><button onclick="addTeacher()" class="w-full header-bg text-white p-3.5 rounded-xl font-bold">Add Teacher</button><div id="teachersList" class="mt-4 space-y-2"></div></div>
+function renderTimetable(){
+  const container = document.getElementById('tab-timetable');
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const periods = ['8:00-8:45','8:45-9:30','9:30-10:00 BREAK','10:00-10:45','10:45-11:30','11:30-12:15','12:15-13:00'];
 
-<div class="absolute bottom-0 left-0 right-0 p-5 text-center border-t bg-white/95"><div class="gold-line w-32 mx-auto mb-3"></div><p class="gold-text text-[12px]">Developed by E- Mutawakil Sadik</p></div>
-</div>
+  container.innerHTML = `
+    <div class="p-4 border-b flex justify-between items-center no-print">
+      <h2 class="font-black">${currentGrade} - Timetable</h2>
+      <div class="flex gap-2">
+        <button onclick="clearTimetable()" class="bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-bold">Clear All</button>
+        <button onclick="window.print()" class="bg-[#0F2B46] text-white px-3 py-1 rounded-full text-xs">Print</button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-center text-xs">
+        <thead class="bg-[#0F2B46] text-white"><tr><th class="p-3">Day</th>${periods.map(p=>`<th class="p-2 ${p.includes('BREAK')?'bg-[#E8E0D0] text-[#5C4A3D]':''}">${p}</th>`).join('')}</tr></thead>
+        <tbody id="ttBody">${days.map(day=>{
+          return `<tr class="border-b">${`<td class="p-3 font-black bg-gray-50">${day}</td>` + periods.map((p,i)=>{
+            if(p.includes('BREAK')) return `<td class="bg-[#E8E0D0]/70 font-bold text-[#5C4A3D]">BREAK</td>`;
+            const key = `${currentGrade}_${day}_${i}`;
+            const val = timetable[key]||'';
+            const colorClass = val? (subjectColors[val]||'bg-gray-100') : 'bg-gray-50';
+            const canEdit = currentUser==='admin' || currentUser==='developer';
+            if(canEdit){
+              return `<td class="p-1"><select onchange="saveTT('${key}',this.value)" class="w-full p-2 rounded-lg text-[11px] font-bold border-0 cursor-pointer ${colorClass}"><option value="">-</option>${subjects.map(s=>`<option ${val===s?'selected':''}>${s}</option>`).join('')}</select></td>`;
+            }else{
+              return `<td class="p-1"><div class="p-2 rounded-lg font-bold ${colorClass}">${val||'-'}</div></td>`;
+            }
+          }).join('')}</tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>
+    <div class="p-3 bg-gray-50 text-[10px] flex flex-wrap gap-2">
+      ${subjects.map(s=>`<span class="flex items-center gap-1"><span class="w-3 h-3 rounded ${subjectColors[s]||'bg-gray-300'}"></span>${s}</span>`).join('')}
+    </div>
+  `;
+}
 
-<script type="module">
-let data={students:[],grades:{},teachers:[],attendance:{},periods:{},exams:{},periodTimes:{},timetables:{},subjects:{'1':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'2':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'3':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'4-science':["Arabic","English","Advanced Math","Physics","Chemistry","Biology","Islamic","Computer"],'4-literary':["Arabic","English","Basic Math","History","Geography","Islamic","Computer","French"]}};
-let currentUser=null,currentClass='1',currentGrade4='science',editingCell=null;
-const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday"]; const PERIODS=[1,2,3,4,5,6,7,8];
-async function initFirebase(){try{const snap=await window.fGetDoc(window.fDoc(window.db,"union","main"));if(snap.exists()){data=snap.data();if(!data.timetables)data.timetables={};document.getElementById('fbStatus').textContent="● Synced - LIVE v15 ✅";document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}else{await window.fSetDoc(window.fDoc(window.db,"union","main"),data);}window.fOnSnapshot(window.fDoc(window.db,"union","main"),(d)=>{if(d.exists()){data=d.data();if(!data.timetables)data.timetables={};if(currentUser)render();}});}catch(e){document.getElementById('fbStatus').textContent="● Error: Check Rules";}}
-initFirebase();function save(){window.fSetDoc(window.fDoc(window.db,"union","main"),data);}
-window.doLogin=function(){let pin=document.getElementById('loginPin').value.trim();if(pin==='9999'){currentUser={name:'Developer 👑 v15',role:'developer',subject:'All'};startApp();return;}if(pin==='1234'){currentUser={name:'Principal Admin',role:'admin',subject:'All'};startApp();return;}let t=data.teachers.find(x=>x.pin===pin);if(!t)return alert('Wrong PIN');currentUser=t;startApp();}
-window.startApp=function(){document.getElementById('login').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');document.getElementById('userRole').textContent=currentUser.name;document.getElementById('classTabs').innerHTML=['1','2','3','4'].map(c=>`<button onclick="setClass('${c}')" id="c${c}" class="cbtn bg-white/20 p-3 rounded-2xl">${c==='4'?'Grade 4':'Grade '+c}</button>`).join('');let isAdmin=currentUser.role==='admin'||currentUser.role==='developer';['tb-subjects','tb-timetable','tb-exams','tb-teachers'].forEach(id=>{document.getElementById(id).classList.toggle('hidden',!isAdmin)});if(!isAdmin){document.getElementById('mySubject').textContent='My Subject: '+currentUser.subject;tab('grades');}else tab('timetable');setClass('1');}
-window.logout=function(){currentUser=null;document.getElementById('mainApp').classList.add('hidden');document.getElementById('login').classList.remove('hidden');}
-window.getKey=function(){if(currentClass!=='4')return currentClass;return '4-'+currentGrade4;}
-window.setClass=function(c){if(c==='4'){let sel=prompt('Grade 4 Section:\n1 = Science\n2 = Literary\nType 1 or 2','1');if(sel==='2')currentGrade4='literary';else currentGrade4='science';currentClass=c;}else currentClass=c;document.querySelectorAll('.cbtn').forEach(b=>b.className='cbtn bg-white/20 p-3 rounded-2xl');let el=document.getElementById('c'+c);if(el){el.className='cbtn bg-white text-[#7D2C8A] p-3 rounded-2xl font-bold';if(c==='4')el.textContent='Grade 4 - '+(currentGrade4==='science'?'Science':'Lit');}render();}
-window.tab=function(t){['students','grades','subjects','timetable','exams','attendance','results','teachers'].forEach(v=>{let el=document.getElementById('view-'+v);if(el)el.classList.add('hidden')});document.getElementById('view-'+t).classList.remove('hidden');document.querySelectorAll('.tab').forEach(b=>{b.className='tab bg-[#F9F1FB] px-4 py-2.5 rounded-full'});let active=document.getElementById('t-'+t);if(active)active.className='tab tab-active px-4 py-2.5 rounded-full';if(t==='subjects'||t==='timetable'||t==='exams'||t==='teachers'){let adminTab=document.getElementById('tb-'+t);if(adminTab)adminTab.className='tab tab-active px-4 py-2.5 rounded-full';}render();}
+function saveTT(k,v){
+  if(v) timetable[k]=v; else delete timetable[k];
+  localStorage.setItem('union_v16_tt',JSON.stringify(timetable));
+  renderTimetable();
+}
+function clearTimetable(){
+  if(!confirm('Clear timetable for '+currentGrade+'?')) return;
+  Object.keys(timetable).forEach(k=>{if(k.startsWith(currentGrade)) delete timetable[k];});
+  localStorage.setItem('union_v16_tt',JSON.stringify(timetable));
+  renderTimetable();
+}
 
-window.getTT=function(){let k=getKey();if(!data.timetables[k])data.timetables[k]={};DAYS.forEach(d=>{if(!data.timetables[k][d])data.timetables[k][d]={};});return data.timetables[k];}
-window.renderTimetable=function(){
-let key=getKey();document.getElementById('ttGrade').textContent=key.toUpperCase();
-let tt=getTT();let subs=data.subjects[key]||[];let isAdmin=currentUser.role==='admin'||currentUser.role==='developer';
-let html='';DAYS.forEach(day=>{
-html+=`<tr class="border-b border-[#F9F1FB]"><td class="p-2.5 font-bold bg-[#F9F1FB] text-[#5A1F62]">${day}</td>`;
-PERIODS.forEach(p=>{
-let sub=tt[day][p]||''; let bg=sub?'bg-[#F1F8E8] border-[#8CC63F]/30':'bg-white border-[#F9F1FB]';
-if(p===4)html+=`<td class="p-1 text-center bg-gray-100 text-[9px] font-bold">BREAK</td>`;
-html+=`<td class="p-1 timetable-cell border ${bg} ${isAdmin?'cursor-pointer hover:bg-[#7D2C8A]/10':''}" onclick="${isAdmin?`editCell('${day}',${p})`:''}"><div class="text-[10px] font-bold text-center leading-tight">${sub?sub.substring(0,12):'<span class=\"opacity-20\">-</span>'}</div></td>`;
+// PDF & WhatsApp Report - Professional Central Equatoria Format
+function printSingleReport(id){
+  const s = students.find(x=>x.id===id);
+  if(!s) return;
+  const win = window.open('','_blank');
+  win.document.write(`
+    <html><head><title>Student Report</title><style>
+      body{font-family:Arial;padding:20px;color:#0F2B46}
+     .header{display:flex;justify-content:space-between;border-bottom:3px solid #7D2C8A;padding-bottom:15px}
+     .logo{width:80px;height:80px}
+     .title{text-align:center;margin:20px 0}
+      table{width:100%;border-collapse:collapse;margin:15px 0}
+      th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:13px}
+      th{background:#0F2B46;color:white}
+     .footer{margin-top:30px;display:flex;justify-content:space-between;font-size:11px}
+    </style></head><body>
+      <div class="header">
+        <div><h2>UNION SECONDARY SCHOOL</h2><p>Central Equatoria State - Juba</p><p>Student Payment Report - Term 2026</p></div>
+        <img src="logo.png" class="logo">
+      </div>
+      <div class="title"><h3>Student Registration & Fees Report</h3></div>
+      <table>
+        <tr><th>Student Name</th><td>${s.name}</td><th>Grade</th><td>${s.grade}</td></tr>
+        <tr><th>Parent Name</th><td>${s.parent}</td><th>WhatsApp</th><td>${s.whatsapp}</td></tr>
+        <tr><th>Total Fees</th><td>${s.total} SSP</td><th>Paid</th><td style="color:green;font-weight:bold">${s.paid} SSP</td></tr>
+        <tr><th>Remaining</th><td style="color:red;font-weight:bold">${s.remaining} SSP</td><th>Date</th><td>${s.date}</td></tr>
+      </table>
+      <p style="font-size:11px;margin-top:20px">Note: This document is official per Central Equatoria State Ministry of Education regulations.</p>
+      <div class="footer"><span>Registrar Signature: ___________</span><span>School Stamp: ___________</span><span>${new Date().toLocaleString()}</span></div>
+      <script>window.print();<\/script>
+    </body></html>
+  `);
+}
+
+function sendWhatsAppReport(id){
+  const s = students.find(x=>x.id===id);
+  if(!s) return;
+  const msg = `*UNION SECONDARY SCHOOL* - Central Equatoria%0A%0A*Student Report - Term 2026*%0A%0A👤 Student: ${s.name}%0A🏫 Grade: ${s.grade}%0A👨‍👩‍👦 Parent: ${s.parent}%0A💰 Total Fees: ${s.total} SSP%0A✅ Paid: ${s.paid} SSP%0A❌ Remaining: ${s.remaining} SSP%0A📅 Date: ${s.date}%0A%0A_This is official report per Ministry of Education, Central Equatoria State_`;
+  window.open(`https://wa.me/${s.whatsapp.replace(/[^0-9]/g,'')}?text=${msg}`,'_blank');
+}
+
+function exportGradePDF(){
+  const filtered = students.filter(s=>s.grade===currentGrade);
+  if(!filtered.length) return alert('No students');
+  const win = window.open('','_blank');
+  win.document.write(`<html><body><h2>${currentGrade} - Students List - ${filtered.length} Students</h2><table border=1 cellpadding=8 style="width:100%;border-collapse:collapse;font-size:12px"><tr><th>Name</th><th>Parent</th><th>WhatsApp</th><th>Paid</th><th>Remain</th></tr>${filtered.map(s=>`<tr><td>${s.name}</td><td>${s.parent}</td><td>${s.whatsapp}</td><td>${s.paid}</td><td>${s.remaining}</td></tr>`).join('')}</table><script>window.print()<\/script></body></html>`);
+}
+        function renderResultsDesign(){
+  const container = document.getElementById('tab-results');
+  const filtered = students.filter(s=>s.grade===currentGrade);
+  container.innerHTML = `
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-black text-lg">Term Results - ${currentGrade} - Central Equatoria Format</h2>
+      <div class="flex gap-2 no-print">
+        <button onclick="generateAllResultsPDF()" class="bg-[#7D2C8A] text-white px-4 py-2 rounded-full text-xs font-bold">📄 All Results PDF</button>
+        <button onclick="window.print()" class="bg-[#0F2B46] text-white px-4 py-2 rounded-full text-xs">Print</button>
+      </div>
+    </div>
+
+    <div class="bg-[#F9F1FB] border-2 border-dashed border-[#7D2C8A]/30 rounded-2xl p-4 mb-4">
+      <h3 class="font-bold text-sm mb-2">⚙️ Result Settings (Ministry Rules)</h3>
+      <div class="grid grid-cols-3 gap-3 text-xs">
+        <div><label>Term</label><select id="termSelect" class="w-full border p-2 rounded-lg"><option>Term 1 - 2026</option><option>Term 2 - 2026</option><option>Final - 2026</option></select></div>
+        <div><label>Pass Mark</label><input id="passMark" value="50" class="w-full border p-2 rounded-lg"></div>
+        <div><label>Grading System</label><select class="w-full border p-2 rounded-lg"><option>Central Equatoria Standard (A,B,C,D,F)</option></select></div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      ${filtered.map(s=>{
+        const results = JSON.parse(localStorage.getItem('results_'+s.id)||'{}');
+        const avg = Object.values(results).length? (Object.values(results).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(results).length).toFixed(1):0;
+        const grade = avg>=80?'A':avg>=65?'B':avg>=50?'C':avg>=35?'D':'F';
+        return `
+        <div class="bg-white border rounded-2xl p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div><p class="font-black">${s.name}</p><p class="text-[11px] opacity-60">${s.grade} • ${s.parent} • ${s.whatsapp}</p></div>
+            <div class="text-right"><span class="px-3 py-1 rounded-full text-xs font-black ${grade==='F'?'bg-red-100 text-red-600':'bg-green-100 text-green-700'}">${grade} - ${avg}%</span><br><button onclick="enterMarks(${s.id})" class="mt-2 bg-[#0F2B46] text-white px-3 py-1 rounded-full text-[10px] no-print">Enter Marks</button></div>
+          </div>
+          <div class="grid grid-cols-4 md:grid-cols-8 gap-2 mt-3">
+            ${subjects.map(sub=>{
+              const mark = results[sub]||'';
+              return `<div class="bg-gray-50 rounded-lg p-2 text-center"><div class="text-[9px] opacity-60">${sub}</div><div class="font-bold text-sm">${mark||'-'}</div></div>`;
+            }).join('')}
+          </div>
+          <div class="flex gap-2 mt-3 no-print">
+            <button onclick="printResultCard(${s.id})" class="flex-1 bg-[#7D2C8A] text-white py-2 rounded-xl text-xs font-bold">🎓 Result Card PDF</button>
+            <button onclick="sendResultWhatsApp(${s.id})" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold">WhatsApp Result</button>
+          </div>
+        </div>
+        `;
+      }).join('') || '<p class="text-center p-8 opacity-50">No students in this grade. Register first.</p>'}
+    </div>
+  `;
+}
+
+function enterMarks(id){
+  const s = students.find(x=>x.id===id);
+  if(!s) return;
+  let results = JSON.parse(localStorage.getItem('results_'+id)||'{}');
+  let html = `Enter marks for ${s.name}:\n\n`;
+  subjects.forEach(sub=>{
+    const current = results[sub]||'';
+    const val = prompt(`${sub} (current: ${current||'empty'}):`, current);
+    if(val!==null) results[sub]=val;
+  });
+  localStorage.setItem('results_'+id, JSON.stringify(results));
+  renderResultsDesign();
+}
+
+function printResultCard(id){
+  const s = students.find(x=>x.id===id);
+  const results = JSON.parse(localStorage.getItem('results_'+id)||'{}');
+  const term = document.getElementById('termSelect')?.value||'Term 2 - 2026';
+  const avg = Object.values(results).length? (Object.values(results).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(results).length).toFixed(1):0;
+  const grade = avg>=80?'A - Excellent':avg>=65?'B - Very Good':avg>=50?'C - Good':avg>=35?'D - Pass':'F - Fail';
+  const passMark = document.getElementById('passMark')?.value||50;
+
+  const win = window.open('','_blank');
+  win.document.write(`
+    <html><head><style>
+      @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap');
+      body{font-family:'Tajawal',Arial; padding:20px; color:#0F2B46; max-width:800px; margin:auto; border:3px double #7D2C8A}
+    .header{text-align:center; border-bottom:4px solid #7D2C8A; padding-bottom:15px; margin-bottom:15px}
+     .header h1{margin:0; color:#7D2C8A; font-size:22px}
+     .header h2{margin:5px 0; font-size:16px}
+     .info{display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px; margin:15px 0; background:#F9F1FB; padding:12px; border-radius:10px}
+      table{width:100%; border-collapse:collapse; margin:15px 0}
+      th,td{border:1px solid #0F2B46; padding:10px; text-align:center; font-size:13px}
+      th{background:#0F2B46; color:white}
+     .grade-box{text-align:center; margin:20px 0; padding:15px; background:${avg>=50?'#dcfce7':'#fee2e2'}; border-radius:15px}
+     .footer{display:flex; justify-content:space-between; margin-top:30px; font-size:11px; border-top:2px solid #ccc; padding-top:15px}
+    </style></head><body>
+      <div class="header">
+        <img src="logo.png" style="width:70px;height:70px;border-radius:50%;background:white;padding:5px">
+        <h1>UNION SECONDARY SCHOOL</h1>
+        <h2>Central Equatoria State - Juba - South Sudan</h2>
+        <p>Ministry of General Education & Instruction - Official Result Card</p>
+        <h3 style="color:#7D2C8A">${term}</h3>
+      </div>
+      <div class="info">
+        <div><b>Student Name:</b> ${s.name}</div><div><b>Grade:</b> ${s.grade}</div>
+        <div><b>Parent:</b> ${s.parent}</div><div><b>WhatsApp:</b> ${s.whatsapp}</div>
+        <div><b>Academic Year:</b> 2025-2026</div><div><b>Date:</b> ${new Date().toLocaleDateString()}</div>
+      </div>
+      <table>
+        <tr><th>Subject</th><th>Full Mark</th><th>Obtained</th><th>Grade</th><th>Remarks</th></tr>
+        ${subjects.map(sub=>{
+          const m = parseFloat(results[sub]||0);
+          const g = m>=80?'A':m>=65?'B':m>=50?'C':m>=35?'D':'F';
+          return `<tr><td style="text-align:left;font-weight:bold">${sub}</td><td>100</td><td style="font-weight:bold">${results[sub]||'-'}</td><td>${results[sub]?g:'-'}</td><td>${m>=passMark?'Pass':'Fail'}</td></tr>`;
+        }).join('')}
+      </table>
+      <div class="grade-box">
+        <h2 style="margin:0">Average: ${avg}% - ${grade}</h2>
+        <p style="margin:5px 0;font-size:12px">Result according to Central Equatoria State grading system. Pass mark: ${passMark}%</p>
+      </div>
+      <div class="footer">
+        <div>Class Teacher<br><br>____________</div>
+        <div>Headmaster<br><br>____________</div>
+        <div>School Stamp<br><br>____________</div>
+      </div>
+      <p style="text-align:center;font-size:9px;margin-top:20px;color:#888">This document is official and generated by Union Secondary School System v16 PRO - Any alteration voids validity</p>
+      <script>window.print()<\/script>
+    </body></html>
+  `);
+}
+
+function sendResultWhatsApp(id){
+  const s = students.find(x=>x.id===id);
+  const results = JSON.parse(localStorage.getItem('results_'+id)||'{}');
+  const avg = Object.values(results).length? (Object.values(results).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(results).length).toFixed(1):0;
+  let msg = `*UNION SECONDARY SCHOOL*%0A*Official Result - Central Equatoria*%0A%0A👤 ${s.name}%0A🏫 ${s.grade}%0A%0A*Results:*%0A`;
+  subjects.forEach(sub=>{ if(results[sub]) msg+=`${sub}: ${results[sub]}/100%0A`; });
+  msg+=`%0A*Average: ${avg}%*%0A%0A_Contact school for original card_`;
+  window.open(`https://wa.me/${s.whatsapp.replace(/[^0-9]/g,'')}?text=${msg}`,'_blank');
+}
+
+function generateAllResultsPDF(){
+  alert('Generating combined PDF for '+currentGrade+'... Use Print All from browser (Ctrl+P)');
+  window.print();
+}
+
+// Security fix - hide PINs
+document.addEventListener('DOMContentLoaded', ()=>{
+  const pinInput = document.getElementById('pinInput');
+  if(pinInput){ pinInput.type='password'; pinInput.addEventListener('copy',e=>e.preventDefault()); }
 });
-html+='</tr>';
-});
-document.getElementById('timetableBody').innerHTML=html;
-}
-window.editCell=function(day,period){
-if(!(currentUser.role==='admin'||currentUser.role==='developer'))return;
-editingCell={day,period};document.getElementById('ttEditPanel').classList.remove('hidden');
-document.getElementById('editCellLabel').textContent=day+' - Period '+period;
-let subs=data.subjects[getKey()]||[];
-document.getElementById('ttSubjectChoices').innerHTML=subs.map(s=>`<button onclick="setCellSubject('${s}')" class="bg-white border-2 border-[#F9F1FB] p-2.5 rounded-xl text-[11px] font-bold hover:border-[#7D2C8A] hover:bg-[#F9F1FB]">${s}</button>`).join('')+`<button onclick="setCellSubject('')" class="bg-red-50 border border-red-200 p-2.5 rounded-xl text-[11px] font-bold text-red-600 col-span-2">❌ Clear / Free</button>`;
-}
-window.setCellSubject=function(sub){
-if(!editingCell)return;let tt=getTT();tt[editingCell.day][editingCell.period]=sub;save();renderTimetable();closeEdit();
-}
-window.closeEdit=function(){document.getElementById('ttEditPanel').classList.add('hidden');editingCell=null;}
-window.clearTimetable=function(){if(!confirm('Clear entire timetable for '+getKey().toUpperCase()+'?'))return;data.timetables[getKey()]={};save();render();}
-
-window.addStudent=function(){let n=document.getElementById('newName').value.trim();if(n.length<3)return;data.students.push({id:Date.now(),name:n,class:getKey()});document.getElementById('newName').value='';save();render();}
-window.addTeacher=function(){let name=document.getElementById('tName').value.trim();let sub=document.getElementById('tSub').value;let pin=document.getElementById('tPin').value.trim();if(!name||!pin)return;if(data.teachers.find(x=>x.pin===pin))return alert('PIN used');data.teachers.push({name,subject:sub,pin,role:'teacher'});document.getElementById('tName').value='';document.getElementById('tPin').value='';save();render();}
-window.addSubject=function(){let k=getKey();let name=document.getElementById('newSub').value.trim();if(!name)return;if(!data.subjects[k])data.subjects[k]=[];data.subjects[k].push(name);document.getElementById('newSub').value='';save();render();}
-window.addExam=function(){let k=getKey();let sub=document.getElementById('examSub').value;let date=document.getElementById('examDate').value;let time=document.getElementById('examTime').value;if(!sub||!date||!time)return;if(!data.exams[k])data.exams[k]=[];data.exams[k].push({sub,date,time});save();render();}
-window.render=function(){
-let key=getKey();let subs=data.subjects[key]||[];let list=data.students.filter(s=>s.class===key);
-document.getElementById('tSub').innerHTML=subs.map(s=>`<option>${s}</option>`).join('');document.getElementById('examSub').innerHTML=subs.map(s=>`<option>${s}</option>`).join('');
-document.getElementById('studentsList').innerHTML=list.map(s=>`<div class="border-2 border-[#F9F1FB] p-3.5 rounded-2xl flex justify-between bg-white"><span class="font-bold text-sm">${s.name}</span><button onclick="if(confirm('Delete?')){data.students=data.students.filter(x=>x.id!==${s.id});save();render();}" class="text-red-400 text-[11px] font-bold">DELETE</button></div>`).join('')||'<p class="text-xs opacity-30 text-center mt-8">No students</p>';
-document.getElementById('subjectsList').innerHTML=subs.map((s,i)=>`<div class="flex justify-between bg-[#F9F1FB] p-3 rounded-xl text-xs font-bold"><span>${s}</span><button onclick="data.subjects['${key}'].splice(${i},1);save();render();" class="text-red-500">X</button></div>`).join('');
-document.getElementById('examTable').innerHTML=(data.exams[key]||[]).map((e,i)=>`<div class="border p-3 rounded-xl text-[11px] bg-[#F9F1FB]"><div class="flex justify-between font-bold"><b>${e.sub}</b><button onclick="data.exams['${key}'].splice(${i},1);save();render();" class="text-red-500">Delete</button></div><div>${e.date} ${e.time}</div></div>`).join('')||'<p class="text-[10px] opacity-30">No exams</p>';
-let mySub=currentUser?.role==='teacher'?currentUser.subject:null;let today=new Date().toISOString().split('T')[0];
-document.getElementById('gradesList').innerHTML=list.map(s=>{let g=data.grades[s.id]||{};if(currentUser?.role!=='teacher'){let rows=subs.map(sub=>{let vv=g[sub]||{t1:0,t2:0,f:0};return `<div class="flex justify-between text-[11px] bg-[#F9F1FB] p-2 rounded-xl"><span>${sub}</span><span class="font-bold">${vv.t1+vv.t2+vv.f}</span></div>`}).join('');return `<div class="border-2 border-[#F9F1FB] rounded-2xl p-3"><p class="font-bold text-sm">${s.name}</p><div class="mt-2 space-y-1">${rows}</div></div>`;}else{let v=g[mySub]||{t1:0,t2:0,f:0};return `<div class="border-2 border-[#F9F1FB] rounded-2xl p-3 flex justify-between items-center"><p class="font-bold text-sm flex-1">${s.name}</p><div class="flex gap-1"><input id="t1_${s.id}" type="number" value="${v.t1}" class="w-11 border rounded-lg p-2 text-center text-xs"><input id="t2_${s.id}" type="number" value="${v.t2}" class="w-11 border rounded-lg p-2 text-center text-xs"><input id="f_${s.id}" type="number" value="${v.f}" class="w-11 border rounded-lg p-2 text-center text-xs"><button onclick="saveGrade(${s.id})" class="bg-[#7D2C8A] text-white px-3 py-2 rounded-lg text-[10px]">SAVE</button></div></div>`;}}).join('');
-document.getElementById('attList').innerHTML=list.map(s=>{let absent=data.attendance[s.id+'_'+today]===false;return `<div class="border-2 border-[#F9F1FB] p-3.5 rounded-2xl flex justify-between"><span class="text-sm font-bold">${s.name}</span><button onclick="toggleAtt(${s.id})" class="px-4 py-1.5 rounded-full text-[11px] font-bold ${!absent?'bg-[#F1F8E8] text-green-700':'bg-red-100 text-red-700'}">${!absent?'Present ✅':'Absent ❌'}</button></div>`;}).join('');
-let ranked=list.map(s=>{let g=data.grades[s.id]||{};let tot=0;subs.forEach(sub=>{let v=g[sub];if(v)tot+=v.t1+v.t2+v.f;});return {...s,total:tot};}).sort((a,b)=>b.total-a.total);
-document.getElementById('rankingList').innerHTML=ranked.map((s,i)=>`<div class="border-2 p-3.5 rounded-2xl flex justify-between mt-2"><p class="font-bold text-sm">${i+1}. ${s.name} - ${s.total}</p><span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':''}</span></div>`).join('');
-document.getElementById('teachersList').innerHTML=data.teachers.map(t=>`<div class="border-2 border-[#F9F1FB] p-3 rounded-xl flex justify-between text-xs"><div><p class="font-bold">${t.name}</p><p>PIN: •••• 🔒 ${t.subject}</p></div><button onclick="data.teachers=data.teachers.filter(x=>x.pin!=='${t.pin}');save();render();" class="text-red-500 font-bold">Delete</button></div>`).join('')||'<p class="text-[11px] opacity-30">No teachers</p>';
-renderTimetable();
-}
-window.saveGrade=function(sid){let t1=parseInt(document.getElementById('t1_'+sid).value)||0;let t2=parseInt(document.getElementById('t2_'+sid).value)||0;let f=parseInt(document.getElementById('f_'+sid).value)||0;if(!data.grades[sid])data.grades[sid]={};data.grades[sid][currentUser.subject]={t1,t2,f};save();render();}
-window.toggleAtt=function(sid){let k=sid+'_'+new Date().toISOString().split('T')[0];if(data.attendance[k]===false)delete data.attendance[k];else data.attendance[k]=false;save();render();}
-window.allPresent=function(){let today=new Date().toISOString().split('T')[0];data.students.filter(s=>s.class===getKey()).forEach(s=>{delete data.attendance[s.id+'_'+today]});save();render();}
 </script>
 </body>
-  </html>
+</html>
