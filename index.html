@@ -1,36 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Union Secondary School v16 PRO</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Union Secondary v16 PRO - E-Mutwokil Sadik</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-.login-footer{color:#C9A86A!important;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
-@media print{.no-print{display:none!important}}
+:root{--p:#7D2C8A;--b:#2D9CDB;--g:#8CC63F;--gold:#FFD700;--light:#F9F1FB}
+body{background:var(--light);font-family:Inter,Arial}
+.dev-gold{color:var(--gold)!important;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.8);letter-spacing:.5px}
+.login-bg{background:linear-gradient(135deg,#7D2C8A 0%,#2D9CDB 100%)}
 </style>
 </head>
-<body class="bg-[#F9F1FB] min-h-screen">
-<div id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#0F2B46]">
-  <img src="logo.png" class="w-28 h-28 rounded-full bg-white p-2 mb-6">
-  <h1 class="text-3xl font-black text-white">UNION SECONDARY SCHOOL</h1>
-  <p class="text-white/70 mt-2 text-sm">LIVE FIREBASE v16 PRO</p>
-  <div class="w-full max-w-sm mt-10">
-    <input id="pinInput" type="password" placeholder="••••" class="w-full p-4 rounded-xl text-center text-2xl tracking-[0.5em] bg-white/95">
-    <button onclick="login()" class="w-full mt-4 bg-[#0F2B46] border-2 border-[#C9A86A] text-white p-4 rounded-xl font-black text-lg">LOGIN</button>
-    <p class="login-footer text-center mt-6 text-sm">Developed by Union Dev Team • Central Equatoria State</p>
-    <p class="text-green-400 text-center mt-3 text-xs">● Database Connected</p>
-  </div>
+<body>
+<div id="login" class="min-h-screen flex flex-col items-center justify-center p-6 login-bg">
+<img src="logo.png" class="w-32 h-32 rounded-full bg-white p-2 shadow-2xl mb-6">
+<h1 class="text-3xl font-black text-white">UNION SECONDARY</h1>
+<p class="text-white/70 text-xs tracking-[0.4em] mt-2">v16 PRO • CENTRAL EQUATORIA</p>
+<div class="w-full max-w-sm mt-8 bg-white/15 backdrop-blur p-6 rounded-[24px] border border-white/20">
+<input id="pin" type="password" placeholder="••••" class="w-full p-4 rounded-xl text-center text-2xl tracking-[0.6em] bg-white focus:ring-4 focus:ring-yellow-400/50 outline-none">
+<button onclick="goLogin()" class="w-full mt-4 bg-[#7D2C8A] border-2 border-[#FFD700] text-white p-4 rounded-xl font-black">LOGIN</button>
+<p class="dev-gold text-center mt-6 text-[14px]">Developed by E-Mutwokil Sadik</p>
+<p class="text-green-300 text-center mt-2 text-xs">● Database Connected</p>
 </div>
-<div id="mainApp" class="hidden">
-  <header class="bg-[#0F2B46] text-white p-4 flex justify-between items-center no-print"><span class="font-black">UNION SECONDARY v16 PRO</span><button onclick="location.reload()" class="bg-red-500 px-4 py-1 rounded-full text-xs">LOGOUT</button></header>
-  <div class="p-4">
-    <h2 id="welcome" class="font-black text-xl mb-4">Dashboard - Ready</h2>
-    <p class="text-sm">الكود الكامل شغال، بس عشان الماسنجر بيقطع - أرسل ليك الملف الكامل كـ Gist؟</p>
-  </div>
 </div>
+
+<div id="app" class="hidden">
+<header class="bg-white border-b-4 border-[#7D2C8A] p-4 flex justify-between sticky top-0 z-50"><span class="font-black text-[#7D2C8A]">UNION v16 PRO</span><button onclick="location.reload()" class="bg-red-500 text-white px-4 py-1 rounded-full text-xs">LOGOUT</button></header>
+<div class="max-w-7xl mx-auto p-4 grid grid-cols-12 gap-4">
+<aside class="col-span-12 lg:col-span-3 space-y-4">
+<div class="bg-white rounded-2xl p-4 shadow border-t-4 border-[#7D2C8A]"><h3 class="font-black text-sm mb-2">Grades</h3><div id="gBtns" class="space-y-2"></div></div>
+<div class="bg-white rounded-2xl p-4 shadow"><h3 class="font-black text-sm flex justify-between">Motto <button id="mBtn" onclick="editM()" class="hidden text-[10px] text-[#7D2C8A]">EDIT</button></h3><p id="motto" class="text-sm italic mt-2"></p></div>
+<div class="bg-gradient-to-br from-[#7D2C8A] to-[#2D9CDB] text-white rounded-2xl p-4"><h3 class="font-black text-sm">📢 Teacher Board</h3><div id="aList" class="text-xs mt-2 space-y-2"></div><div id="aForm" class="hidden mt-3"><textarea id="aIn" class="w-full p-2 rounded text-black text-xs"></textarea><button onclick="postA()" class="w-full mt-2 bg-[#FFD700] text-[#7D2C8A] py-1.5 rounded font-black text-xs">POST</button></div></div>
+</aside>
+<main class="col-span-12 lg:col-span-9">
+<div class="flex gap-2 mb-4 overflow-x-auto"><button onclick="tab('stu')" class="bg-[#7D2C8A] text-white px-5 py-2 rounded-full text-xs font-bold">Students</button><button onclick="tab('reg')" class="bg-white border px-5 py-2 rounded-full text-xs font-bold">+ Registration</button><button onclick="tab('tt')" class="bg-white border px-5 py-2 rounded-full text-xs font-bold">Timetable</button><button onclick="tab('res')" class="bg-white border px-5 py-2 rounded-full text-xs font-bold">Results</button></div>
+<div id="t-stu" class="bg-white rounded-2xl p-4 shadow border"></div>
+<div id="t-reg" class="hidden bg-white rounded-2xl p-6 shadow border"><h2 class="font-black mb-4">New Student Registration - Term Start</h2><div class="grid md:grid-cols-2 gap-3"><input id="rName" placeholder="Student Full Name" class="border p-3 rounded-xl text-sm"><select id="rGrade" class="border p-3 rounded-xl text-sm"></select><input id="rPar" placeholder="Parent Name" class="border p-3 rounded-xl text-sm"><input id="rWa" placeholder="WhatsApp 249..." class="border p-3 rounded-xl text-sm"><input id="rPaid" type="number" placeholder="Paid SSP" class="border p-3 rounded-xl text-sm" oninput="calcR()"><input id="rTot" type="number" value="150000" class="border p-3 rounded-xl text-sm" oninput="calcR()"></div><div class="bg-[#F9F1FB] p-3 rounded-xl mt-3 flex justify-between"><span>Remaining</span><span id="rRem" class="font-black text-red-600">0 SSP</span></div><button onclick="doReg()" class="w-full mt-4 bg-[#7D2C8A] text-white p-3 rounded-xl font-black">REGISTER & ADD TO CLASS</button></div>
+<div id="t-tt" class="hidden bg-white rounded-2xl shadow border overflow-hidden"></div>
+<div id="t-res" class="hidden bg-white rounded-2xl p-4 shadow border"></div>
+</main>
+</div>
+<p class="dev-gold text-center p-6 bg-[#7D2C8A] mt-10">Developed by E-Mutwokil Sadik • Central Equatoria State</p>
+</div>
+
 <script>
-function login(){ const pin=document.getElementById('pinInput').value; if(pin==='2026'||pin==='1234'||pin==='0000'){document.getElementById('loginPage').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');}else alert('Invalid PIN'); }
+const grades=['Grade 1','Grade 2 Science','Grade 2 Arts','Grade 3 Science','Grade 3 Arts'];
+const subjects=['Arabic','English','Math','Physics','Chemistry','Biology','History','Geography','Islamic','Computer'];
+const sColor={Arabic:'#7D2C8A',English:'#2D9CDB',Math:'#8CC63F',Physics:'#FF8C42',Chemistry:'#5C4A3D',Biology:'#1e8449',History:'#8e44ad',Geography:'#2980b9',Islamic:'#1e4a3e',Computer:'#34495e'};
+let curG=grades[0],students=JSON.parse(localStorage.getItem('u16_stu')||'[]'),anns=JSON.parse(localStorage.getItem('u16_ann')||'["Welcome Term 2 - 2026"]'),mottoTxt=localStorage.getItem('u16_mot')||'"Education for Unity & Excellence"',tt=JSON.parse(localStorage.getItem('u16_tt')||'{}'),user=null;
+function goLogin(){const p=document.getElementById('pin').value;if(p==='2026'||p==='1234'||p==='0000'){user=p==='2026'?'developer':p==='1234'?'admin':'teacher';document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');if(user==='developer'||user==='admin'){document.getElementById('mBtn').classList.remove('hidden');document.getElementById('aForm').classList.remove('hidden');}init();}else alert('Invalid');}
+function init(){document.getElementById('motto').innerText=mottoTxt;document.getElementById('gBtns').innerHTML=grades.map(g=>`<button onclick="setG('${g}')" class="w-full text-left p-3 rounded-xl text-xs font-bold border ${curG===g?'bg-[#7D2C8A] text-white':'bg-[#F9F1FB]'}">${g} <span class="float-right">${students.filter(s=>s.grade===g).length}</span></button>`).join('');document.getElementById('rGrade').innerHTML=grades.map(g=>`<option>${g}</option>`).join('');document.getElementById('aList').innerHTML=anns.map(a=>`<div class="bg-white/15 p-2 rounded-lg">${a}</div>`).join('');renderStu();}
+function setG(g){curG=g;init();}function tab(t){document.querySelectorAll('[id^="t-"]').forEach(e=>e.classList.add('hidden'));document.getElementById('t-'+t).classList.remove('hidden');if(t==='stu')renderStu();if(t==='tt')renderTT();if(t==='res')renderRes();}
+function editM(){const m=prompt('Edit Motto:',mottoTxt);if(m){mottoTxt=m;localStorage.setItem('u16_mot',m);document.getElementById('motto').innerText=m;}}function postA(){const v=document.getElementById('aIn').value;if(!v)return;anns.unshift(v);localStorage.setItem('u16_ann',JSON.stringify(anns));document.getElementById('aIn').value='';init();}
+function calcR(){const p=parseFloat(document.getElementById('rPaid').value)||0,t=parseFloat(document.getElementById('rTot').value)||0;document.getElementById('rRem').innerText=(t-p)+' SSP';}
+function doReg(){const s={id:Date.now(),name:document.getElementById('rName').value,grade:document.getElementById('rGrade').value,parent:document.getElementById('rPar').value,whatsapp:document.getElementById('rWa').value,paid:document.getElementById('rPaid').value,total:document.getElementById('rTot').value,remaining:parseFloat(document.getElementById('rTot').value||0)-parseFloat(document.getElementById('rPaid').value||0),date:new Date().toLocaleDateString()};if(!s.name||!s.parent||!s.whatsapp)return alert('Fill all');students.push(s);localStorage.setItem('u16_stu',JSON.stringify(students));alert('✅ '+s.name+' added to '+s.grade);init();tab('stu');}
+function renderStu(){const c=document.getElementById('t-stu'),f=students.filter(s=>s.grade===curG);c.innerHTML=`<div class="flex justify-between mb-4"><h2 class="font-black">${curG} - ${f.length} Students</h2><button onclick="expPDF()" class="bg-[#0F2B46] text-white px-4 py-2 rounded-full text-xs">📄 PDF</button></div><div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-[#7D2C8A] text-white"><tr><th class="p-3">Name</th><th class="p-3">Parent</th><th class="p-3">WhatsApp</th><th class="p-3">Paid</th><th class="p-3">Remain</th><th class="p-3">Action</th></tr></thead><tbody>${f.map(s=>`<tr class="border-b"><td class="p-3 font-bold">${s.name}</td><td class="p-3">${s.parent}</td><td class="p-3">${s.whatsapp}</td><td class="p-3 text-green-600 font-bold">${s.paid}</td><td class="p-3 text-red-600">${s.remaining}</td><td class="p-3 flex gap-1"><button onclick="sWA(${s.id})" class="bg-green-500 text-white px-2 py-1 rounded-full">WA</button><button onclick="pOne(${s.id})" class="bg-[#7D2C8A] text-white px-2 py-1 rounded-full">PDF</button><button onclick="dS(${s.id})" class="bg-red-100 text-red-600 px-2 py-1 rounded-full">X</button></td></tr>`).join('')||'<tr><td colspan=6 class="p-8 text-center opacity-50">No students - Register first</td></tr>'}</tbody></table></div>`;}
+function dS(id){if(!confirm('Delete?'))return;students=students.filter(s=>s.id!==id);localStorage.setItem('u16_stu',JSON.stringify(students));init();}
+function renderTT(){const c=document.getElementById('t-tt'),days=['Mon','Tue','Wed','Thu','Fri'],pers=['8:00','8:45','BREAK','10:00','10:45','11:30','12:15'];c.innerHTML=`<div class="p-4 border-b flex justify-between"><h2 class="font-black">${curG} Timetable</h2><button onclick="clearTT()" class="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full">Clear</button></div><div class="overflow-x-auto"><table class="w-full text-center text-xs"><thead class="bg-[#7D2C8A] text-white"><tr><th class="p-2">Day</th>${pers.map(p=>`<th class="p-2">${p}</th>`).join('')}</tr></thead><tbody>${days.map(d=>`<tr class="border-b"><td class="p-2 font-black bg-[#F9F1FB]">${d}</td>${pers.map((p,i)=>{if(p==='BREAK')return`<td class="bg-[#E8E0D0] font-bold">BREAK</td>`;const k=`${curG}_${d}_${i}`,v=tt[k]||'',bg=v?sColor[v]:'#f3f4f6',can=user==='admin'||user==='developer';return`<td class="p-1">${can?`<select onchange="saveTT('${k}',this.value)" style="background:${bg};color:${v?'white':'#999'}" class="w-full p-2 rounded-lg font-bold text-[11px]"><option value="">-</option>${subjects.map(s=>`<option ${v===s?'selected':''}>${s}</option>`).join('')}</select>`:`<div style="background:${bg};color:white" class="p-2 rounded-lg font-bold">${v||'-'}</div>`}</td>`}).join('')}</tr>`).join('')}</tbody></table></div>`;}
+function saveTT(k,v){if(v)tt[k]=v;else delete tt[k];localStorage.setItem('u16_tt',JSON.stringify(tt));renderTT();}function clearTT(){if(!confirm('Clear?'))return;Object.keys(tt).forEach(k=>{if(k.startsWith(curG))delete tt[k];});localStorage.setItem('u16_tt',JSON.stringify(tt));renderTT();}
+function renderRes(){const c=document.getElementById('t-res'),f=students.filter(s=>s.grade===curG);c.innerHTML=`<h2 class="font-black mb-4">${curG} - Term Results</h2><div class="space-y-3">${f.map(s=>{const r=JSON.parse(localStorage.getItem('res_'+s.id)||'{}'),avg=Object.values(r).length?(Object.values(r).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(r).length).toFixed(1):0;return`<div class="border rounded-xl p-3"><div class="flex justify-between"><span class="font-bold">${s.name}</span><span class="bg-[#F9F1FB] px-2 py-1 rounded-full text-xs font-black">${avg}%</span></div><div class="grid grid-cols-5 gap-1 mt-2 text-[10px]">${subjects.map(sub=>`<div class="bg-gray-50 p-1 rounded text-center">${sub}<br><b>${r[sub]||'-'}</b></div>`).join('')}</div><div class="flex gap-2 mt-2"><button onclick="eM(${s.id})" class="flex-1 bg-[#7D2C8A] text-white py-2 rounded-xl text-xs">Enter Marks</button><button onclick="pCard(${s.id})" class="flex-1 bg-[#2D9CDB] text-white py-2 rounded-xl text-xs">PDF Card</button><button onclick="sR(${s.id})" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs">WhatsApp</button></div></div>`}).join('')||'No students'}</div>`;}
+function eM(id){let r=JSON.parse(localStorage.getItem('res_'+id)||'{}');subjects.forEach(s=>{const cur=r[s]||'';const v=prompt(s+':',cur);if(v!==null)r[s]=v;});localStorage.setItem('res_'+id,JSON.stringify(r));renderRes();}
+function pOne(id){const s=students.find(x=>x.id===id),w=window.open('','_blank');w.document.write(`<body style="font-family:Arial;padding:20px"><h2 style="color:#7D2C8A">UNION SECONDARY - Central Equatoria</h2><p>Name: ${s.name}</p><p>Grade: ${s.grade}</p><p>Parent: ${s.parent} - ${s.whatsapp}</p><p>Paid: ${s.paid} / ${s.total} - Remain: ${s.remaining} SSP</p><p>Date: ${s.date}</p><p style="font-size:10px">Developed by E-Mutwokil Sadik</p><script>window.print()<\/script></body>`);}
+function sWA(id){const s=students.find(x=>x.id===id),msg=`*UNION SECONDARY*%0AStudent: ${s.name}%0AGrade: ${s.grade}%0APaid: ${s.paid}/${s.total}%0ARemain: ${s.remaining} SSP%0ADeveloped by E-Mutwokil Sadik`;window.open(`https://wa.me/${s.whatsapp.replace(/[^0-9]/g,'')}?text=${msg}`,'_blank');}
+function pCard(id){const s=students.find(x=>x.id===id),r=JSON.parse(localStorage.getItem('res_'+id)||'{}'),avg=Object.values(r).length?(Object.values(r).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(r).length).toFixed(1):0,w=window.open('','_blank');w.document.write(`<body style="font-family:Arial;padding:20px"><h2 style="color:#7D2C8A;text-align:center">UNION SECONDARY SCHOOL<br><small>Central Equatoria - Official Result - Developed by E-Mutwokil Sadik</small></h2><p>Name: ${s.name} | Grade: ${s.grade} | Parent: ${s.parent}</p><table border=1 cellpadding=8 style="width:100%;border-collapse:collapse"><tr><th>Subject</th><th>Mark</th><th>Grade</th></tr>${subjects.map(sub=>`<tr><td>${sub}</td><td>${r[sub]||'-'}</td><td>${r[sub]?(parseFloat(r[sub])>=50?'Pass':'Fail'):'-'}</td></tr>`).join('')}<tr style="font-weight:bold;background:#F9F1FB"><td>Average</td><td colspan=2>${avg}%</td></tr></table><p style="margin-top:30px;display:flex;justify-content:space-between;font-size:11px"><span>Teacher: _______</span><span>Headmaster: _______</span><span>Stamp: _______</span></p><script>window.print()<\/script></body>`);}
+function sR(id){const s=students.find(x=>x.id===id),r=JSON.parse(localStorage.getItem('res_'+id)||'{}');let m=`*Result ${s.name} - ${s.grade}*%0A`;Object.entries(r).forEach(([k,v])=>{m+=`${k}: ${v}%0A`;});window.open(`https://wa.me/${s.whatsapp.replace(/[^0-9]/g,'')}?text=${m}`,'_blank');}
+function expPDF(){const f=students.filter(s=>s.grade===curG),w=window.open('','_blank');w.document.write(`<body><h2>${curG} - ${f.length} Students - Developed by E-Mutwokil Sadik</h2><table border=1 cellpadding=6 style="width:100%;border-collapse:collapse;font-size:12px"><tr><th>Name</th><th>Parent</th><th>WhatsApp</th><th>Paid</th><th>Remain</th></tr>${f.map(s=>`<tr><td>${s.name}</td><td>${s.parent}</td><td>${s.whatsapp}</td><td>${s.paid}</td><td>${s.remaining}</td></tr>`).join('')}</table><script>window.print()<\/script></body>`);}
 </script>
 </body>
 </html>
