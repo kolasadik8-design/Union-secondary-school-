@@ -1,70 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Union Secondary v16 PRO - E-Mutwokil Sadik</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Union Secondary - v15 Timetable</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
 <style>
-:root{--p:#7D2C8A;--b:#2D9CDB;--g:#8CC63F;--gold:#FFD700;--light:#F9F1FB}
-body{background:var(--light);font-family:Inter,Arial}
-.dev-gold{color:var(--gold)!important;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.8);letter-spacing:.5px}
-.login-bg{background:linear-gradient(135deg,#7D2C8A 0%,#2D9CDB 100%)}
+*{font-family:Inter,sans-serif}
+.logo-text{background:linear-gradient(90deg,#7D2C8A 0%,#9C3BAD 35%,#8CC63F 70%,#2D9CDB 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:900;}
+.gold-text{background:linear-gradient(90deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Cinzel,serif;font-weight:900;filter:drop-shadow(0 0 10px rgba(191,149,63,0.6));}
+.gold-line{height:2px;background:linear-gradient(90deg,transparent,#BF953F,#FCF6BA,#B38728,transparent);}
+.header-bg{background:linear-gradient(135deg,#7D2C8A 0%,#5A1F62 100%);}
+.tab-active{background:#7D2C8A!important;color:white!important;}
+.timetable-cell{min-height:45px}
 </style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyC1JXw0075RtuguFChN9-noXh1CpEe_qh8",authDomain:"union-secondary-school.firebaseapp.com",projectId:"union-secondary-school",storageBucket:"union-secondary-school.firebasestorage.app",messagingSenderId:"365279926139",appId:"1:365279926139:web:9ad23c142668a5412ccfde"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+window.db=db;window.fDoc=doc;window.fSetDoc=setDoc;window.fGetDoc=getDoc;window.fOnSnapshot=onSnapshot;
+</script>
 </head>
-<body>
-<div id="login" class="min-h-screen flex flex-col items-center justify-center p-6 login-bg">
-<img src="logo.png" class="w-32 h-32 rounded-full bg-white p-2 shadow-2xl mb-6">
-<h1 class="text-3xl font-black text-white">UNION SECONDARY</h1>
-<p class="text-white/70 text-xs tracking-[0.4em] mt-2">v16 PRO • CENTRAL EQUATORIA</p>
-<div class="w-full max-w-sm mt-8 bg-white/15 backdrop-blur p-6 rounded-[24px] border border-white/20">
-<input id="pin" type="password" placeholder="••••" class="w-full p-4 rounded-xl text-center text-2xl tracking-[0.6em] bg-white focus:ring-4 focus:ring-yellow-400/50 outline-none">
-<button onclick="goLogin()" class="w-full mt-4 bg-[#7D2C8A] border-2 border-[#FFD700] text-white p-4 rounded-xl font-black">LOGIN</button>
-<p class="dev-gold text-center mt-6 text-[14px]">Developed by E-Mutwokil Sadik</p>
-<p class="text-green-300 text-center mt-2 text-xs">● Database Connected</p>
+<body class="bg-[#F9F1FB]">
+<div id="login" class="max-w-[420px] mx-auto min-h-screen flex flex-col p-6 bg-white">
+<div class="flex-1 flex flex-col justify-center items-center">
+<img src="logo.png" class="w-36 h-36 object-contain mb-4" onerror="this.style.display='none'">
+<h1 class="logo-text text-[26px] text-center">UNION SECONDARY</h1>
+<p class="text-center text-[11px] mt-1 tracking-[0.3em] text-[#7D2C8A] font-bold">v15 - TIMETABLE</p>
+<div class="mt-8 w-full space-y-4">
+<input id="loginPin" type="password" placeholder="••••" class="w-full p-4 border-2 border-[#F9F1FB] rounded-2xl text-center text-2xl tracking-[0.5em] bg-[#F9F1FB] outline-none focus:border-[#7D2C8A]">
+<button onclick="doLogin()" class="w-full header-bg text-white p-4 rounded-2xl font-bold shadow-lg">LOGIN</button>
+<p id="fbStatus" class="text-center text-[10px] mt-3 font-bold text-[#7D2C8A]">● Connecting...</p>
+</div>
+</div>
+<div class="mt-auto pt-6 text-center"><div class="gold-line w-32 mx-auto mb-3"></div><p class="gold-text text-[13px]">Developed by E- Mutawakil Sadik</p></div>
+</div>
+
+<div id="mainApp" class="hidden max-w-[900px] mx-auto bg-white min-h-screen shadow-xl pb-32 relative">
+<div class="header-bg text-white p-5 rounded-b-[35px] sticky top-0 z-20">
+<div class="flex justify-between items-center"><div class="flex items-center gap-3"><img src="logo.png" class="w-10 h-10 rounded-full bg-white p-1" onerror="this.style.display='none'"><h1 id="userRole" class="font-bold text-sm">Principal</h1></div><div class="flex gap-2"><span class="text-[10px] bg-[#8CC63F] px-3 py-1 rounded-full font-bold">● LIVE v15</span><button onclick="logout()" class="bg-red-500 px-3 py-1 rounded-full text-[10px] font-bold">LOGOUT</button></div></div>
+<div id="classTabs" class="grid grid-cols-4 gap-2 mt-5 text-[12px] font-bold text-center"></div>
+</div>
+
+<div class="px-2 flex gap-1.5 overflow-auto text-[10px] font-bold py-3 sticky top-[98px] bg-white z-10 border-b">
+<button onclick="tab('students')" id="t-students" class="tab tab-active px-4 py-2.5 rounded-full">Students</button>
+<button onclick="tab('grades')" id="t-grades" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full">Grades</button>
+<button onclick="tab('timetable')" id="tb-timetable" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Timetable</button>
+<button onclick="tab('subjects')" id="tb-subjects" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Subjects</button>
+<button onclick="tab('exams')" id="tb-exams" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Exams</button>
+<button onclick="tab('attendance')" id="t-attendance" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full">Attendance</button>
+<button onclick="tab('results')" id="t-results" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full">Results</button>
+<button onclick="tab('teachers')" id="tb-teachers" class="tab bg-[#F9F1FB] px-4 py-2.5 rounded-full hidden">Teachers</button>
+</div>
+
+<div id="view-students" class="p-4"><div class="flex gap-2"><input id="newName" placeholder="Student Full Name" class="flex-1 border-2 border-[#F9F1FB] p-3.5 rounded-2xl text-sm focus:border-[#7D2C8A] outline-none"><button onclick="addStudent()" class="header-bg text-white w-14 rounded-2xl font-bold text-xl">+</button></div><div id="studentsList" class="mt-4 space-y-2"></div></div>
+<div id="view-grades" class="hidden p-4"><div class="p-3 bg-[#F1F8E8] rounded-2xl text-xs font-bold"><b id="mySubject">My Subject</b></div><div id="gradesList" class="mt-4 space-y-3"></div></div>
+
+<!-- NEW REAL TIMETABLE -->
+<div id="view-timetable" class="hidden p-3">
+<div class="flex justify-between items-center mb-3"><h3 class="font-bold text-[#7D2C8A] text-[15px]">📅 Weekly Timetable - <span id="ttGrade">Grade 1</span></h3><button onclick="clearTimetable()" class="text-[10px] bg-red-50 text-red-600 px-3 py-1.5 rounded-full font-bold">Clear All</button></div>
+<div class="bg-amber-50 border border-amber-200 p-2.5 rounded-xl text-[10px] font-bold mb-3">✏️ Admin/Developer can tap any cell to change subject. Students & Teachers view only.</div>
+<div class="overflow-auto border-2 border-[#F9F1FB] rounded-2xl">
+<table class="w-full text-[11px] border-collapse">
+<thead><tr class="bg-[#7D2C8A] text-white"><th class="p-2.5 text-left">Day / Period</th><th class="p-2">1<br><span class="text-[9px] opacity-70">08:00</span></th><th class="p-2">2<br><span class="text-[9px] opacity-70">08:45</span></th><th class="p-2">3<br><span class="text-[9px] opacity-70">09:30</span></th><th class="p-2 bg-[#5A1F62]">BREAK</th><th class="p-2">4<br><span class="text-[9px] opacity-70">10:30</span></th><th class="p-2">5<br><span class="text-[9px] opacity-70">11:15</span></th><th class="p-2">6<br><span class="text-[9px] opacity-70">12:00</span></th><th class="p-2">7<br><span class="text-[9px] opacity-70">12:45</span></th><th class="p-2">8<br><span class="text-[9px] opacity-70">13:30</span></th></tr></thead>
+<tbody id="timetableBody"></tbody>
+</table>
+</div>
+<div id="ttEditPanel" class="hidden mt-4 p-3 bg-[#F9F1FB] rounded-2xl border-2 border-[#7D2C8A]/20">
+<p class="text-xs font-bold mb-2">Edit: <span id="editCellLabel"></span></p>
+<div id="ttSubjectChoices" class="grid grid-cols-2 gap-2"></div>
+<button onclick="closeEdit()" class="w-full mt-3 bg-gray-200 p-2.5 rounded-xl text-xs font-bold">Cancel</button>
 </div>
 </div>
 
-<div id="app" class="hidden">
-<header class="bg-white border-b-4 border-[#7D2C8A] p-4 flex justify-between sticky top-0 z-50"><span class="font-black text-[#7D2C8A]">UNION v16 PRO</span><button onclick="location.reload()" class="bg-red-500 text-white px-4 py-1 rounded-full text-xs">LOGOUT</button></header>
-<div class="max-w-7xl mx-auto p-4 grid grid-cols-12 gap-4">
-<aside class="col-span-12 lg:col-span-3 space-y-4">
-<div class="bg-white rounded-2xl p-4 shadow border-t-4 border-[#7D2C8A]"><h3 class="font-black text-sm mb-2">Grades</h3><div id="gBtns" class="space-y-2"></div></div>
-<div class="bg-white rounded-2xl p-4 shadow"><h3 class="font-black text-sm flex justify-between">Motto <button id="mBtn" onclick="editM()" class="hidden text-[10px] text-[#7D2C8A]">EDIT</button></h3><p id="motto" class="text-sm italic mt-2"></p></div>
-<div class="bg-gradient-to-br from-[#7D2C8A] to-[#2D9CDB] text-white rounded-2xl p-4"><h3 class="font-black text-sm">📢 Teacher Board</h3><div id="aList" class="text-xs mt-2 space-y-2"></div><div id="aForm" class="hidden mt-3"><textarea id="aIn" class="w-full p-2 rounded text-black text-xs"></textarea><button onclick="postA()" class="w-full mt-2 bg-[#FFD700] text-[#7D2C8A] py-1.5 rounded font-black text-xs">POST</button></div></div>
-</aside>
-<main class="col-span-12 lg:col-span-9">
-<div class="flex gap-2 mb-4 overflow-x-auto"><button onclick="tab('stu')" class="bg-[#7D2C8A] text-white px-5 py-2 rounded-full text-xs font-bold">Students</button><button onclick="tab('reg')" class="bg-white border px-5 py-2 rounded-full text-xs font-bold">+ Registration</button><button onclick="tab('tt')" class="bg-white border px-5 py-2 rounded-full text-xs font-bold">Timetable</button><button onclick="tab('res')" class="bg-white border px-5 py-2 rounded-full text-xs font-bold">Results</button></div>
-<div id="t-stu" class="bg-white rounded-2xl p-4 shadow border"></div>
-<div id="t-reg" class="hidden bg-white rounded-2xl p-6 shadow border"><h2 class="font-black mb-4">New Student Registration - Term Start</h2><div class="grid md:grid-cols-2 gap-3"><input id="rName" placeholder="Student Full Name" class="border p-3 rounded-xl text-sm"><select id="rGrade" class="border p-3 rounded-xl text-sm"></select><input id="rPar" placeholder="Parent Name" class="border p-3 rounded-xl text-sm"><input id="rWa" placeholder="WhatsApp 249..." class="border p-3 rounded-xl text-sm"><input id="rPaid" type="number" placeholder="Paid SSP" class="border p-3 rounded-xl text-sm" oninput="calcR()"><input id="rTot" type="number" value="150000" class="border p-3 rounded-xl text-sm" oninput="calcR()"></div><div class="bg-[#F9F1FB] p-3 rounded-xl mt-3 flex justify-between"><span>Remaining</span><span id="rRem" class="font-black text-red-600">0 SSP</span></div><button onclick="doReg()" class="w-full mt-4 bg-[#7D2C8A] text-white p-3 rounded-xl font-black">REGISTER & ADD TO CLASS</button></div>
-<div id="t-tt" class="hidden bg-white rounded-2xl shadow border overflow-hidden"></div>
-<div id="t-res" class="hidden bg-white rounded-2xl p-4 shadow border"></div>
-</main>
-</div>
-<p class="dev-gold text-center p-6 bg-[#7D2C8A] mt-10">Developed by E-Mutwokil Sadik • Central Equatoria State</p>
+<div id="view-subjects" class="hidden p-4 space-y-3"><h3 class="font-bold text-[#7D2C8A]">📚 Subjects</h3><div class="flex gap-2"><input id="newSub" placeholder="New Subject" class="flex-1 border p-3 rounded-xl text-sm"><button onclick="addSubject()" class="header-bg text-white px-5 rounded-xl text-xs font-bold">+ ADD</button></div><div id="subjectsList" class="space-y-2 mt-3"></div></div>
+<div id="view-exams" class="hidden p-4 space-y-3"><h3 class="font-bold text-[#7D2C8A]">📅 Exams</h3><div id="examTable" class="space-y-2"></div><div class="border-2 border-dashed p-3 rounded-2xl space-y-2 bg-[#F9F1FB]"><select id="examSub" class="w-full border p-2.5 rounded-xl text-xs font-bold"></select><div class="grid grid-cols-2 gap-2"><input id="examDate" type="date" class="border p-2.5 rounded-xl text-xs"><input id="examTime" type="time" class="border p-2.5 rounded-xl text-xs"></div><button onclick="addExam()" class="w-full header-bg text-white p-3 rounded-xl text-xs font-bold">+ ADD EXAM</button></div></div>
+<div id="view-attendance" class="hidden p-4"><div id="attList" class="space-y-2"></div><button onclick="allPresent()" class="w-full mt-4 bg-[#8CC63F] text-white p-3.5 rounded-2xl text-xs font-bold">✅ All Present</button></div>
+<div id="view-results" class="hidden p-4"><div id="rankingList" class="space-y-2"></div></div>
+<div id="view-teachers" class="hidden p-4 space-y-3"><input id="tName" placeholder="Teacher Name" class="w-full border p-3 rounded-xl text-sm"><select id="tSub" class="w-full border p-3 rounded-xl text-sm"></select><input id="tPin" placeholder="4-digit PIN" class="w-full border p-3 rounded-xl text-sm"><button onclick="addTeacher()" class="w-full header-bg text-white p-3.5 rounded-xl font-bold">Add Teacher</button><div id="teachersList" class="mt-4 space-y-2"></div></div>
+
+<div class="absolute bottom-0 left-0 right-0 p-5 text-center border-t bg-white/95"><div class="gold-line w-32 mx-auto mb-3"></div><p class="gold-text text-[12px]">Developed by E- Mutawakil Sadik</p></div>
 </div>
 
-<script>
-const grades=['Grade 1','Grade 2 Science','Grade 2 Arts','Grade 3 Science','Grade 3 Arts'];
-const subjects=['Arabic','English','Math','Physics','Chemistry','Biology','History','Geography','Islamic','Computer'];
-const sColor={Arabic:'#7D2C8A',English:'#2D9CDB',Math:'#8CC63F',Physics:'#FF8C42',Chemistry:'#5C4A3D',Biology:'#1e8449',History:'#8e44ad',Geography:'#2980b9',Islamic:'#1e4a3e',Computer:'#34495e'};
-let curG=grades[0],students=JSON.parse(localStorage.getItem('u16_stu')||'[]'),anns=JSON.parse(localStorage.getItem('u16_ann')||'["Welcome Term 2 - 2026"]'),mottoTxt=localStorage.getItem('u16_mot')||'"Education for Unity & Excellence"',tt=JSON.parse(localStorage.getItem('u16_tt')||'{}'),user=null;
-function goLogin(){const p=document.getElementById('pin').value;if(p==='2026'||p==='1234'||p==='0000'){user=p==='2026'?'developer':p==='1234'?'admin':'teacher';document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');if(user==='developer'||user==='admin'){document.getElementById('mBtn').classList.remove('hidden');document.getElementById('aForm').classList.remove('hidden');}init();}else alert('Invalid');}
-function init(){document.getElementById('motto').innerText=mottoTxt;document.getElementById('gBtns').innerHTML=grades.map(g=>`<button onclick="setG('${g}')" class="w-full text-left p-3 rounded-xl text-xs font-bold border ${curG===g?'bg-[#7D2C8A] text-white':'bg-[#F9F1FB]'}">${g} <span class="float-right">${students.filter(s=>s.grade===g).length}</span></button>`).join('');document.getElementById('rGrade').innerHTML=grades.map(g=>`<option>${g}</option>`).join('');document.getElementById('aList').innerHTML=anns.map(a=>`<div class="bg-white/15 p-2 rounded-lg">${a}</div>`).join('');renderStu();}
-function setG(g){curG=g;init();}function tab(t){document.querySelectorAll('[id^="t-"]').forEach(e=>e.classList.add('hidden'));document.getElementById('t-'+t).classList.remove('hidden');if(t==='stu')renderStu();if(t==='tt')renderTT();if(t==='res')renderRes();}
-function editM(){const m=prompt('Edit Motto:',mottoTxt);if(m){mottoTxt=m;localStorage.setItem('u16_mot',m);document.getElementById('motto').innerText=m;}}function postA(){const v=document.getElementById('aIn').value;if(!v)return;anns.unshift(v);localStorage.setItem('u16_ann',JSON.stringify(anns));document.getElementById('aIn').value='';init();}
-function calcR(){const p=parseFloat(document.getElementById('rPaid').value)||0,t=parseFloat(document.getElementById('rTot').value)||0;document.getElementById('rRem').innerText=(t-p)+' SSP';}
-function doReg(){const s={id:Date.now(),name:document.getElementById('rName').value,grade:document.getElementById('rGrade').value,parent:document.getElementById('rPar').value,whatsapp:document.getElementById('rWa').value,paid:document.getElementById('rPaid').value,total:document.getElementById('rTot').value,remaining:parseFloat(document.getElementById('rTot').value||0)-parseFloat(document.getElementById('rPaid').value||0),date:new Date().toLocaleDateString()};if(!s.name||!s.parent||!s.whatsapp)return alert('Fill all');students.push(s);localStorage.setItem('u16_stu',JSON.stringify(students));alert('✅ '+s.name+' added to '+s.grade);init();tab('stu');}
-function renderStu(){const c=document.getElementById('t-stu'),f=students.filter(s=>s.grade===curG);c.innerHTML=`<div class="flex justify-between mb-4"><h2 class="font-black">${curG} - ${f.length} Students</h2><button onclick="expPDF()" class="bg-[#0F2B46] text-white px-4 py-2 rounded-full text-xs">📄 PDF</button></div><div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-[#7D2C8A] text-white"><tr><th class="p-3">Name</th><th class="p-3">Parent</th><th class="p-3">WhatsApp</th><th class="p-3">Paid</th><th class="p-3">Remain</th><th class="p-3">Action</th></tr></thead><tbody>${f.map(s=>`<tr class="border-b"><td class="p-3 font-bold">${s.name}</td><td class="p-3">${s.parent}</td><td class="p-3">${s.whatsapp}</td><td class="p-3 text-green-600 font-bold">${s.paid}</td><td class="p-3 text-red-600">${s.remaining}</td><td class="p-3 flex gap-1"><button onclick="sWA(${s.id})" class="bg-green-500 text-white px-2 py-1 rounded-full">WA</button><button onclick="pOne(${s.id})" class="bg-[#7D2C8A] text-white px-2 py-1 rounded-full">PDF</button><button onclick="dS(${s.id})" class="bg-red-100 text-red-600 px-2 py-1 rounded-full">X</button></td></tr>`).join('')||'<tr><td colspan=6 class="p-8 text-center opacity-50">No students - Register first</td></tr>'}</tbody></table></div>`;}
-function dS(id){if(!confirm('Delete?'))return;students=students.filter(s=>s.id!==id);localStorage.setItem('u16_stu',JSON.stringify(students));init();}
-function renderTT(){const c=document.getElementById('t-tt'),days=['Mon','Tue','Wed','Thu','Fri'],pers=['8:00','8:45','BREAK','10:00','10:45','11:30','12:15'];c.innerHTML=`<div class="p-4 border-b flex justify-between"><h2 class="font-black">${curG} Timetable</h2><button onclick="clearTT()" class="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full">Clear</button></div><div class="overflow-x-auto"><table class="w-full text-center text-xs"><thead class="bg-[#7D2C8A] text-white"><tr><th class="p-2">Day</th>${pers.map(p=>`<th class="p-2">${p}</th>`).join('')}</tr></thead><tbody>${days.map(d=>`<tr class="border-b"><td class="p-2 font-black bg-[#F9F1FB]">${d}</td>${pers.map((p,i)=>{if(p==='BREAK')return`<td class="bg-[#E8E0D0] font-bold">BREAK</td>`;const k=`${curG}_${d}_${i}`,v=tt[k]||'',bg=v?sColor[v]:'#f3f4f6',can=user==='admin'||user==='developer';return`<td class="p-1">${can?`<select onchange="saveTT('${k}',this.value)" style="background:${bg};color:${v?'white':'#999'}" class="w-full p-2 rounded-lg font-bold text-[11px]"><option value="">-</option>${subjects.map(s=>`<option ${v===s?'selected':''}>${s}</option>`).join('')}</select>`:`<div style="background:${bg};color:white" class="p-2 rounded-lg font-bold">${v||'-'}</div>`}</td>`}).join('')}</tr>`).join('')}</tbody></table></div>`;}
-function saveTT(k,v){if(v)tt[k]=v;else delete tt[k];localStorage.setItem('u16_tt',JSON.stringify(tt));renderTT();}function clearTT(){if(!confirm('Clear?'))return;Object.keys(tt).forEach(k=>{if(k.startsWith(curG))delete tt[k];});localStorage.setItem('u16_tt',JSON.stringify(tt));renderTT();}
-function renderRes(){const c=document.getElementById('t-res'),f=students.filter(s=>s.grade===curG);c.innerHTML=`<h2 class="font-black mb-4">${curG} - Term Results</h2><div class="space-y-3">${f.map(s=>{const r=JSON.parse(localStorage.getItem('res_'+s.id)||'{}'),avg=Object.values(r).length?(Object.values(r).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(r).length).toFixed(1):0;return`<div class="border rounded-xl p-3"><div class="flex justify-between"><span class="font-bold">${s.name}</span><span class="bg-[#F9F1FB] px-2 py-1 rounded-full text-xs font-black">${avg}%</span></div><div class="grid grid-cols-5 gap-1 mt-2 text-[10px]">${subjects.map(sub=>`<div class="bg-gray-50 p-1 rounded text-center">${sub}<br><b>${r[sub]||'-'}</b></div>`).join('')}</div><div class="flex gap-2 mt-2"><button onclick="eM(${s.id})" class="flex-1 bg-[#7D2C8A] text-white py-2 rounded-xl text-xs">Enter Marks</button><button onclick="pCard(${s.id})" class="flex-1 bg-[#2D9CDB] text-white py-2 rounded-xl text-xs">PDF Card</button><button onclick="sR(${s.id})" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs">WhatsApp</button></div></div>`}).join('')||'No students'}</div>`;}
-function eM(id){let r=JSON.parse(localStorage.getItem('res_'+id)||'{}');subjects.forEach(s=>{const cur=r[s]||'';const v=prompt(s+':',cur);if(v!==null)r[s]=v;});localStorage.setItem('res_'+id,JSON.stringify(r));renderRes();}
-function pOne(id){const s=students.find(x=>x.id===id),w=window.open('','_blank');w.document.write(`<body style="font-family:Arial;padding:20px"><h2 style="color:#7D2C8A">UNION SECONDARY - Central Equatoria</h2><p>Name: ${s.name}</p><p>Grade: ${s.grade}</p><p>Parent: ${s.parent} - ${s.whatsapp}</p><p>Paid: ${s.paid} / ${s.total} - Remain: ${s.remaining} SSP</p><p>Date: ${s.date}</p><p style="font-size:10px">Developed by E-Mutwokil Sadik</p><script>window.print()<\/script></body>`);}
-function sWA(id){const s=students.find(x=>x.id===id),msg=`*UNION SECONDARY*%0AStudent: ${s.name}%0AGrade: ${s.grade}%0APaid: ${s.paid}/${s.total}%0ARemain: ${s.remaining} SSP%0ADeveloped by E-Mutwokil Sadik`;window.open(`https://wa.me/${s.whatsapp.replace(/[^0-9]/g,'')}?text=${msg}`,'_blank');}
-function pCard(id){const s=students.find(x=>x.id===id),r=JSON.parse(localStorage.getItem('res_'+id)||'{}'),avg=Object.values(r).length?(Object.values(r).reduce((a,b)=>a+parseFloat(b||0),0)/Object.values(r).length).toFixed(1):0,w=window.open('','_blank');w.document.write(`<body style="font-family:Arial;padding:20px"><h2 style="color:#7D2C8A;text-align:center">UNION SECONDARY SCHOOL<br><small>Central Equatoria - Official Result - Developed by E-Mutwokil Sadik</small></h2><p>Name: ${s.name} | Grade: ${s.grade} | Parent: ${s.parent}</p><table border=1 cellpadding=8 style="width:100%;border-collapse:collapse"><tr><th>Subject</th><th>Mark</th><th>Grade</th></tr>${subjects.map(sub=>`<tr><td>${sub}</td><td>${r[sub]||'-'}</td><td>${r[sub]?(parseFloat(r[sub])>=50?'Pass':'Fail'):'-'}</td></tr>`).join('')}<tr style="font-weight:bold;background:#F9F1FB"><td>Average</td><td colspan=2>${avg}%</td></tr></table><p style="margin-top:30px;display:flex;justify-content:space-between;font-size:11px"><span>Teacher: _______</span><span>Headmaster: _______</span><span>Stamp: _______</span></p><script>window.print()<\/script></body>`);}
-function sR(id){const s=students.find(x=>x.id===id),r=JSON.parse(localStorage.getItem('res_'+id)||'{}');let m=`*Result ${s.name} - ${s.grade}*%0A`;Object.entries(r).forEach(([k,v])=>{m+=`${k}: ${v}%0A`;});window.open(`https://wa.me/${s.whatsapp.replace(/[^0-9]/g,'')}?text=${m}`,'_blank');}
-function expPDF(){const f=students.filter(s=>s.grade===curG),w=window.open('','_blank');w.document.write(`<body><h2>${curG} - ${f.length} Students - Developed by E-Mutwokil Sadik</h2><table border=1 cellpadding=6 style="width:100%;border-collapse:collapse;font-size:12px"><tr><th>Name</th><th>Parent</th><th>WhatsApp</th><th>Paid</th><th>Remain</th></tr>${f.map(s=>`<tr><td>${s.name}</td><td>${s.parent}</td><td>${s.whatsapp}</td><td>${s.paid}</td><td>${s.remaining}</td></tr>`).join('')}</table><script>window.print()<\/script></body>`);}
+<script type="module">
+let data={students:[],grades:{},teachers:[],attendance:{},periods:{},exams:{},periodTimes:{},timetables:{},subjects:{'1':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'2':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'3':["Arabic","English","Mathematics","Physics","Chemistry","Biology","Islamic","History","Geography","Computer"],'4-science':["Arabic","English","Advanced Math","Physics","Chemistry","Biology","Islamic","Computer"],'4-literary':["Arabic","English","Basic Math","History","Geography","Islamic","Computer","French"]}};
+let currentUser=null,currentClass='1',currentGrade4='science',editingCell=null;
+const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday"]; const PERIODS=[1,2,3,4,5,6,7,8];
+async function initFirebase(){try{const snap=await window.fGetDoc(window.fDoc(window.db,"union","main"));if(snap.exists()){data=snap.data();if(!data.timetables)data.timetables={};document.getElementById('fbStatus').textContent="● Synced - LIVE v15 ✅";document.getElementById('fbStatus').className="text-center text-[10px] mt-3 text-green-600 font-bold";}else{await window.fSetDoc(window.fDoc(window.db,"union","main"),data);}window.fOnSnapshot(window.fDoc(window.db,"union","main"),(d)=>{if(d.exists()){data=d.data();if(!data.timetables)data.timetables={};if(currentUser)render();}});}catch(e){document.getElementById('fbStatus').textContent="● Error: Check Rules";}}
+initFirebase();function save(){window.fSetDoc(window.fDoc(window.db,"union","main"),data);}
+window.doLogin=function(){let pin=document.getElementById('loginPin').value.trim();if(pin==='9999'){currentUser={name:'Developer 👑 v15',role:'developer',subject:'All'};startApp();return;}if(pin==='1234'){currentUser={name:'Principal Admin',role:'admin',subject:'All'};startApp();return;}let t=data.teachers.find(x=>x.pin===pin);if(!t)return alert('Wrong PIN');currentUser=t;startApp();}
+window.startApp=function(){document.getElementById('login').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');document.getElementById('userRole').textContent=currentUser.name;document.getElementById('classTabs').innerHTML=['1','2','3','4'].map(c=>`<button onclick="setClass('${c}')" id="c${c}" class="cbtn bg-white/20 p-3 rounded-2xl">${c==='4'?'Grade 4':'Grade '+c}</button>`).join('');let isAdmin=currentUser.role==='admin'||currentUser.role==='developer';['tb-subjects','tb-timetable','tb-exams','tb-teachers'].forEach(id=>{document.getElementById(id).classList.toggle('hidden',!isAdmin)});if(!isAdmin){document.getElementById('mySubject').textContent='My Subject: '+currentUser.subject;tab('grades');}else tab('timetable');setClass('1');}
+window.logout=function(){currentUser=null;document.getElementById('mainApp').classList.add('hidden');document.getElementById('login').classList.remove('hidden');}
+window.getKey=function(){if(currentClass!=='4')return currentClass;return '4-'+currentGrade4;}
+window.setClass=function(c){if(c==='4'){let sel=prompt('Grade 4 Section:\n1 = Science\n2 = Literary\nType 1 or 2','1');if(sel==='2')currentGrade4='literary';else currentGrade4='science';currentClass=c;}else currentClass=c;document.querySelectorAll('.cbtn').forEach(b=>b.className='cbtn bg-white/20 p-3 rounded-2xl');let el=document.getElementById('c'+c);if(el){el.className='cbtn bg-white text-[#7D2C8A] p-3 rounded-2xl font-bold';if(c==='4')el.textContent='Grade 4 - '+(currentGrade4==='science'?'Science':'Lit');}render();}
+window.tab=function(t){['students','grades','subjects','timetable','exams','attendance','results','teachers'].forEach(v=>{let el=document.getElementById('view-'+v);if(el)el.classList.add('hidden')});document.getElementById('view-'+t).classList.remove('hidden');document.querySelectorAll('.tab').forEach(b=>{b.className='tab bg-[#F9F1FB] px-4 py-2.5 rounded-full'});let active=document.getElementById('t-'+t);if(active)active.className='tab tab-active px-4 py-2.5 rounded-full';if(t==='subjects'||t==='timetable'||t==='exams'||t==='teachers'){let adminTab=document.getElementById('tb-'+t);if(adminTab)adminTab.className='tab tab-active px-4 py-2.5 rounded-full';}render();}
+
+window.getTT=function(){let k=getKey();if(!data.timetables[k])data.timetables[k]={};DAYS.forEach(d=>{if(!data.timetables[k][d])data.timetables[k][d]={};});return data.timetables[k];}
+window.renderTimetable=function(){
+let key=getKey();document.getElementById('ttGrade').textContent=key.toUpperCase();
+let tt=getTT();let subs=data.subjects[key]||[];let isAdmin=currentUser.role==='admin'||currentUser.role==='developer';
+let html='';DAYS.forEach(day=>{
+html+=`<tr class="border-b border-[#F9F1FB]"><td class="p-2.5 font-bold bg-[#F9F1FB] text-[#5A1F62]">${day}</td>`;
+PERIODS.forEach(p=>{
+let sub=tt[day][p]||''; let bg=sub?'bg-[#F1F8E8] border-[#8CC63F]/30':'bg-white border-[#F9F1FB]';
+if(p===4)html+=`<td class="p-1 text-center bg-gray-100 text-[9px] font-bold">BREAK</td>`;
+html+=`<td class="p-1 timetable-cell border ${bg} ${isAdmin?'cursor-pointer hover:bg-[#7D2C8A]/10':''}" onclick="${isAdmin?`editCell('${day}',${p})`:''}"><div class="text-[10px] font-bold text-center leading-tight">${sub?sub.substring(0,12):'<span class=\"opacity-20\">-</span>'}</div></td>`;
+});
+html+='</tr>';
+});
+document.getElementById('timetableBody').innerHTML=html;
+}
+window.editCell=function(day,period){
+if(!(currentUser.role==='admin'||currentUser.role==='developer'))return;
+editingCell={day,period};document.getElementById('ttEditPanel').classList.remove('hidden');
+document.getElementById('editCellLabel').textContent=day+' - Period '+period;
+let subs=data.subjects[getKey()]||[];
+document.getElementById('ttSubjectChoices').innerHTML=subs.map(s=>`<button onclick="setCellSubject('${s}')" class="bg-white border-2 border-[#F9F1FB] p-2.5 rounded-xl text-[11px] font-bold hover:border-[#7D2C8A] hover:bg-[#F9F1FB]">${s}</button>`).join('')+`<button onclick="setCellSubject('')" class="bg-red-50 border border-red-200 p-2.5 rounded-xl text-[11px] font-bold text-red-600 col-span-2">❌ Clear / Free</button>`;
+}
+window.setCellSubject=function(sub){
+if(!editingCell)return;let tt=getTT();tt[editingCell.day][editingCell.period]=sub;save();renderTimetable();closeEdit();
+}
+window.closeEdit=function(){document.getElementById('ttEditPanel').classList.add('hidden');editingCell=null;}
+window.clearTimetable=function(){if(!confirm('Clear entire timetable for '+getKey().toUpperCase()+'?'))return;data.timetables[getKey()]={};save();render();}
+
+window.addStudent=function(){let n=document.getElementById('newName').value.trim();if(n.length<3)return;data.students.push({id:Date.now(),name:n,class:getKey()});document.getElementById('newName').value='';save();render();}
+window.addTeacher=function(){let name=document.getElementById('tName').value.trim();let sub=document.getElementById('tSub').value;let pin=document.getElementById('tPin').value.trim();if(!name||!pin)return;if(data.teachers.find(x=>x.pin===pin))return alert('PIN used');data.teachers.push({name,subject:sub,pin,role:'teacher'});document.getElementById('tName').value='';document.getElementById('tPin').value='';save();render();}
+window.addSubject=function(){let k=getKey();let name=document.getElementById('newSub').value.trim();if(!name)return;if(!data.subjects[k])data.subjects[k]=[];data.subjects[k].push(name);document.getElementById('newSub').value='';save();render();}
+window.addExam=function(){let k=getKey();let sub=document.getElementById('examSub').value;let date=document.getElementById('examDate').value;let time=document.getElementById('examTime').value;if(!sub||!date||!time)return;if(!data.exams[k])data.exams[k]=[];data.exams[k].push({sub,date,time});save();render();}
+window.render=function(){
+let key=getKey();let subs=data.subjects[key]||[];let list=data.students.filter(s=>s.class===key);
+document.getElementById('tSub').innerHTML=subs.map(s=>`<option>${s}</option>`).join('');document.getElementById('examSub').innerHTML=subs.map(s=>`<option>${s}</option>`).join('');
+document.getElementById('studentsList').innerHTML=list.map(s=>`<div class="border-2 border-[#F9F1FB] p-3.5 rounded-2xl flex justify-between bg-white"><span class="font-bold text-sm">${s.name}</span><button onclick="if(confirm('Delete?')){data.students=data.students.filter(x=>x.id!==${s.id});save();render();}" class="text-red-400 text-[11px] font-bold">DELETE</button></div>`).join('')||'<p class="text-xs opacity-30 text-center mt-8">No students</p>';
+document.getElementById('subjectsList').innerHTML=subs.map((s,i)=>`<div class="flex justify-between bg-[#F9F1FB] p-3 rounded-xl text-xs font-bold"><span>${s}</span><button onclick="data.subjects['${key}'].splice(${i},1);save();render();" class="text-red-500">X</button></div>`).join('');
+document.getElementById('examTable').innerHTML=(data.exams[key]||[]).map((e,i)=>`<div class="border p-3 rounded-xl text-[11px] bg-[#F9F1FB]"><div class="flex justify-between font-bold"><b>${e.sub}</b><button onclick="data.exams['${key}'].splice(${i},1);save();render();" class="text-red-500">Delete</button></div><div>${e.date} ${e.time}</div></div>`).join('')||'<p class="text-[10px] opacity-30">No exams</p>';
+let mySub=currentUser?.role==='teacher'?currentUser.subject:null;let today=new Date().toISOString().split('T')[0];
+document.getElementById('gradesList').innerHTML=list.map(s=>{let g=data.grades[s.id]||{};if(currentUser?.role!=='teacher'){let rows=subs.map(sub=>{let vv=g[sub]||{t1:0,t2:0,f:0};return `<div class="flex justify-between text-[11px] bg-[#F9F1FB] p-2 rounded-xl"><span>${sub}</span><span class="font-bold">${vv.t1+vv.t2+vv.f}</span></div>`}).join('');return `<div class="border-2 border-[#F9F1FB] rounded-2xl p-3"><p class="font-bold text-sm">${s.name}</p><div class="mt-2 space-y-1">${rows}</div></div>`;}else{let v=g[mySub]||{t1:0,t2:0,f:0};return `<div class="border-2 border-[#F9F1FB] rounded-2xl p-3 flex justify-between items-center"><p class="font-bold text-sm flex-1">${s.name}</p><div class="flex gap-1"><input id="t1_${s.id}" type="number" value="${v.t1}" class="w-11 border rounded-lg p-2 text-center text-xs"><input id="t2_${s.id}" type="number" value="${v.t2}" class="w-11 border rounded-lg p-2 text-center text-xs"><input id="f_${s.id}" type="number" value="${v.f}" class="w-11 border rounded-lg p-2 text-center text-xs"><button onclick="saveGrade(${s.id})" class="bg-[#7D2C8A] text-white px-3 py-2 rounded-lg text-[10px]">SAVE</button></div></div>`;}}).join('');
+document.getElementById('attList').innerHTML=list.map(s=>{let absent=data.attendance[s.id+'_'+today]===false;return `<div class="border-2 border-[#F9F1FB] p-3.5 rounded-2xl flex justify-between"><span class="text-sm font-bold">${s.name}</span><button onclick="toggleAtt(${s.id})" class="px-4 py-1.5 rounded-full text-[11px] font-bold ${!absent?'bg-[#F1F8E8] text-green-700':'bg-red-100 text-red-700'}">${!absent?'Present ✅':'Absent ❌'}</button></div>`;}).join('');
+let ranked=list.map(s=>{let g=data.grades[s.id]||{};let tot=0;subs.forEach(sub=>{let v=g[sub];if(v)tot+=v.t1+v.t2+v.f;});return {...s,total:tot};}).sort((a,b)=>b.total-a.total);
+document.getElementById('rankingList').innerHTML=ranked.map((s,i)=>`<div class="border-2 p-3.5 rounded-2xl flex justify-between mt-2"><p class="font-bold text-sm">${i+1}. ${s.name} - ${s.total}</p><span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':''}</span></div>`).join('');
+document.getElementById('teachersList').innerHTML=data.teachers.map(t=>`<div class="border-2 border-[#F9F1FB] p-3 rounded-xl flex justify-between text-xs"><div><p class="font-bold">${t.name}</p><p>PIN: •••• 🔒 ${t.subject}</p></div><button onclick="data.teachers=data.teachers.filter(x=>x.pin!=='${t.pin}');save();render();" class="text-red-500 font-bold">Delete</button></div>`).join('')||'<p class="text-[11px] opacity-30">No teachers</p>';
+renderTimetable();
+}
+window.saveGrade=function(sid){let t1=parseInt(document.getElementById('t1_'+sid).value)||0;let t2=parseInt(document.getElementById('t2_'+sid).value)||0;let f=parseInt(document.getElementById('f_'+sid).value)||0;if(!data.grades[sid])data.grades[sid]={};data.grades[sid][currentUser.subject]={t1,t2,f};save();render();}
+window.toggleAtt=function(sid){let k=sid+'_'+new Date().toISOString().split('T')[0];if(data.attendance[k]===false)delete data.attendance[k];else data.attendance[k]=false;save();render();}
+window.allPresent=function(){let today=new Date().toISOString().split('T')[0];data.students.filter(s=>s.class===getKey()).forEach(s=>{delete data.attendance[s.id+'_'+today]});save();render();}
 </script>
 </body>
 </html>
